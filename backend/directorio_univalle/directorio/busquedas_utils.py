@@ -28,8 +28,13 @@ def buscar_personas(query_param):
         contactos__valor__icontains=query_param
     )
 
+    # Personas por cargo
+    personas_por_cargo = Persona.objects.filter(
+        vinculacion__cargo__nombre__icontains=query_param
+    )
+
     # Unimos ambos conjuntos con OR y eliminamos duplicados
-    personas = (personas_por_nombre | personas_por_correo).distinct()[:10]
+    personas = (personas_por_nombre | personas_por_correo | personas_por_cargo).distinct()[:10]
 
     return PersonaBusquedaPublicaSerializer(personas, many=True).data
 
@@ -42,12 +47,12 @@ def buscar_dependencias(query_param):
 
 def buscar_sedes(query):
     sedes = Sede.objects.filter(
-        Q(nombre__icontains=query)
+        Q(nombre__icontains=query) | Q(ciudad__icontains=query)
     )[:10]
     return SedeSerializer(sedes, many=True).data
 
 def buscar_edificios(query):
     edificios = Edificio.objects.filter(
-        Q(nombre__icontains=query)
+        Q(nombre__icontains=query) | Q(codigo__icontains=query)
     )[:10]
     return EdificioConSedeSerializer(edificios, many=True).data

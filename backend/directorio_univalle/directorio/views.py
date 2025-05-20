@@ -114,10 +114,9 @@ def busquedad_publica(request):
     data = {}
 
     if query:
-        query_param = f'%{query}%'
 
-        data['personas'] = buscar_personas(query_param)
-        data['dependencias'] = buscar_dependencias(query_param)
+        data['personas'] = buscar_personas(query)
+        data['dependencias'] = buscar_dependencias(query)
         data['sedes'] = buscar_sedes(query)
         data['edificios'] = buscar_edificios(query)
     else:

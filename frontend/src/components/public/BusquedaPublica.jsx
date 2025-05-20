@@ -67,7 +67,7 @@ const handleCloseSnackbar = (_, reason) => {
 
         <TextField
           fullWidth
-          label="Escriba nombre, dependencia, correo institucional"
+          label="Escriba nombre de Persona (correo, cargo), dependencia, Edificio o Sede "
           variant="outlined"
           className="input-busqueda"
           value={query}
@@ -122,20 +122,25 @@ const handleCloseSnackbar = (_, reason) => {
         {showModal && (
           <div className="modal-overlay">
             <div className="modal-contenido">
-              <h2>Información de uso</h2>
+              <h2>Guía de búsqueda</h2>
               <p>
-                Utilice el campo de búsqueda para consultar información relacionada con el personal administrativo, las dependencias, los edificios o las sedes de la Universidad del Valle. Por defecto, la búsqueda se realiza sobre <strong>Personas</strong>.
+                Utilice el campo de búsqueda para consultar información relacionada con el personal administrativo, las dependencias, los edificios o las sedes de la Universidad del Valle. Por defecto, la búsqueda se realiza sobre la categoría <strong>Personas</strong>.
               </p>
               <p>
-                Una vez ingresado el término de búsqueda, seleccione la categoría deseada (Personas, Dependencias, Edificios o Sedes) para obtener resultados específicos. <br />
-                - <strong>Personas:</strong> puede buscar por nombre, apellido, cargo, dependencia o correo institucional. <br />
-                - <strong>Dependencias, Edificios y Sedes:</strong> se puede buscar por nombre.
+                <strong>Categorías disponibles:</strong><br />
+                - <strong>Personas:</strong> puede buscar por nombre o apellido.<br />
+                - <strong>Dependencias, Edificios y Sedes:</strong> puede buscar por nombre.
               </p>
               <p>
-                La búsqueda no distingue entre mayúsculas, minúsculas ni tildes, y solo mostrará resultados que coincidan con todos los términos ingresados, aplicando la búsqueda sobre todos los campos disponibles dentro de la categoría seleccionada.
+                Una vez ingresado el término de búsqueda, seleccione la categoría correspondiente (Personas, Dependencias, Edificios o Sedes) para obtener resultados más precisos.<br />
+                - En la categoría <strong>Personas</strong>, es posible filtrar por nombre, apellido, cargo, dependencia o correo institucional.<br />
+                - En las demás categorías, se puede filtrar por cada una de las columnas disponibles.
               </p>
               <p>
-                <strong>Ejemplos:</strong> juliana, ANDRES, GUSTAVO, RUIZ, pérez, secretaria, facultad ciencias, @correo.edu.co, 1234
+                La búsqueda no distingue entre mayúsculas, minúsculas ni tildes. Solo se mostrarán resultados que coincidan con todos los términos ingresados, considerando todos los campos de la categoría seleccionada.
+              </p>
+              <p>
+                <strong>Ejemplos de búsqueda:</strong> juliana, ANDRES, GUSTAVO, RUIZ, pérez, secretaria, facultad ciencias, @correo.edu.co, 1234
               </p>
               <button className="cerrar-btn" onClick={() => setShowModal(false)}>
                 Cerrar
