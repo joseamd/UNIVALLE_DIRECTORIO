@@ -1,0 +1,15 @@
+{
+    "Sede": "sedes",
+    "Edificio": "edificios",
+    "Ubicacion": "ubicaciones",
+    "TipoDependencia": "tipo-dependencias",
+    "Dependencia": "dependencias",
+    "TipoDocumento": "tipo-documentos",
+    "Persona": "personas",
+    "TipoContacto": "tipo-contactos",
+    "ContactoPersona": "contactos-persona",
+    "ContactoDependencia": "contactos-dependencia",
+    "TipoVinculacion": "tipo-vinculaciones",
+    "Cargo": "cargos",
+    "Vinculacion": "vinculaciones"
+}

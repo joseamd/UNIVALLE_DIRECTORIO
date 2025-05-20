@@ -1,0 +1,35 @@
+.form-modal-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 500px;
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 3px 24px rgba(0, 0, 0, 0.2);
+  padding: 32px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.form-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.form-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.form-modal-title {
+  color: #4d4c4c;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  margin: 0;
+}

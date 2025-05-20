@@ -1,0 +1,138 @@
+.navbar {
+    height: 50px;
+    border-bottom: 0.5px solid rgb(231, 228, 228);
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #555;
+    justify-content: space-between; /* Asegura que los elementos se distribuyan bien */
+    position: relative;
+
+    .hamburger-btn {
+      display: none; /* Oculto por defecto */
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: #555;
+      margin-left: 10px;
+      cursor: pointer;
+
+      @media (max-width: 768px) {
+        display: block; /* Mostrar solo en pantallas pequeñas */
+      }
+    }
+  
+    .wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0 20px;
+      transition: all 0.3s ease-in-out; /* Animación suave para mostrar/ocultar */
+  
+      .search {
+        display: flex;
+        align-items: center;
+        border: 0.5px solid lightgray;
+        padding: 5px;
+        width: 40%; /* Por defecto, ocupa el 50% del ancho */
+        
+  
+        input {
+          border: none;
+          outline: none;
+          background: transparent;
+          width: 100%;
+          padding: 5px;
+          font-size: 12px;   
+          margin-top: auto;       
+  
+          &::placeholder {
+            font-size: 12px;
+          }
+        }
+        .MuiSvgIcon-root {
+          cursor: pointer;
+          margin-left: 10px;
+        }
+      }
+  
+      .items {
+        display: flex;
+        align-items: center;
+  
+        .item {
+          display: flex;
+          align-items: center;
+          margin-right: 20px;
+          position: relative;
+  
+          .icon {
+            font-size: 20px;
+          }
+  
+          .avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+          }
+  
+          .counter {
+            width: 15px;
+            height: 15px;
+            background-color: red;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+            position: absolute;
+            top: -5px;
+            right: -5px;
+          }
+        }
+      }
+    }
+  
+    // 📱 Responsive para pantallas pequeñas
+    @media (max-width: 768px) {
+      .wrapper {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px; /* espacio entre search e items */
+        flex-wrap: nowrap;
+        padding: 10px;
+  
+        .search {
+          flex: 1; /* toma todo el espacio disponible */
+          min-width: 0; /* evita que se desborde */
+          margin: 0;
+  
+          input {
+            width: 100%;
+          }
+        }
+  
+        .items {
+          display: flex;
+          flex-shrink: 0; /* evita que se achique */
+          gap: 8px;
+  
+          .item {
+            margin: 0; /* sin margen adicional */
+          }
+        }
+      }
+    }
+    // Agregamos la clase .active para mostrar el menú en móviles
+    .wrapper.active {
+      display: block; /* Cuando está activo, muestra el menú */
+    }
+  }
+
+
+  

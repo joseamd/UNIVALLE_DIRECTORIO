@@ -1,0 +1,159 @@
+// Estilos para la fecha al lado del título
+.fecha {
+  font-style: italic;
+  font-weight: bold;
+  color: #4d4c4c;
+  font-size: 1rem;
+  text-align: right; /* Alinea el texto a la derecha */
+  margin: 0;
+  padding: 10px;
+}
+
+.custom-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background-image: linear-gradient(135deg, #b0b0b0, #e0e0e0);
+  border-radius: 8px;
+  margin-bottom: 1rem;  
+
+  h2 {
+    color: #4d4c4c;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .button-create {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+
+    button {
+      height: 32px; // Si usas MUI buttons, este es buen tamaño
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+
+.custom-data-grid {
+  border: 0;
+  --DataGrid-containerBackground: #e2e2e2 !important;
+
+  .MuiDataGrid-columnHeaders {
+    background-color: #E81C25;
+    color: #4d4c4c;
+  }
+
+  .MuiDataGrid-columnHeaderTitle {
+    font-weight: bold;
+  }
+
+  .MuiDataGrid-row:nth-of-type(odd) {
+    background-color: #f5f5f5;
+  }
+
+  .MuiDataGrid-cell {
+    font-size: 14px;
+  }
+
+  // Estilo para la toolbar
+  .MuiDataGrid-toolbarContainer {
+    background-image: linear-gradient(to right, #C20E1A, #E53935); /* De rojo intenso a rojo brillante */
+    color: #fff;
+    padding: 8px;
+
+    .MuiButtonBase-root,
+    .MuiSvgIcon-root {
+      color: #ffffff !important;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: #ec9a9a !important;
+        border-radius: 4px;
+      }
+    }
+  }
+
+  .MuiTablePagination-root {
+    background-image: linear-gradient(135deg, #b0b0b0, #e0e0e0);
+    color: #4d4e4d;
+    font-weight: bold;
+    border-top: 1px solid #c6c7c6;
+  }
+
+  .custom-data-grid .MuiPaginationItem-root:hover {
+    background-color: #e7e7e7 !important;
+  }
+
+  .MuiInputBase-root {
+    background-color: #ffffff;
+    border-radius: 4px;
+  }
+
+  
+}
+
+// 📱 Responsive para la tabla
+@media (max-width: 768px) {
+  .custom-header {
+    flex-direction: row; // Cambia la dirección a horizontal para pantallas pequeñas
+    justify-content: space-between; // Los elementos se distribuyen de manera uniforme
+    gap: 8px; // Ajusta el espacio para no expandir demasiado 
+    
+    h2 {
+      font-size: 1rem;
+      margin: 0;
+    }
+
+    .fecha {
+      text-align: left;
+      font-size: 0.9rem;
+      padding: 0;
+    }
+
+    .button-create {
+      width: 100%;
+      justify-content: flex-end;
+
+      button {
+        width: auto;
+        font-size: 0.8rem;
+        padding: 4px 10px;
+      }
+    }
+  }
+
+  .data-grid-wrapper {
+    width: 100%;
+    overflow-x: auto; /* Permite desplazarse horizontalmente */
+  }
+
+  .custom-data-grid {
+    .MuiDataGrid-root {
+      overflow-x: auto;
+    }
+
+    .MuiDataGrid-cell,
+    .MuiDataGrid-columnHeader {
+      font-size: 12px;
+      padding: 4px;
+    }
+
+    .MuiTablePagination-root {
+      font-size: 12px;
+    }
+
+    .MuiDataGrid-toolbarContainer {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 8px;
+    }
+  }
+}
+

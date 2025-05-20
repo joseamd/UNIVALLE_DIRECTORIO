@@ -1,0 +1,71 @@
+# === FRONTEND (React) ===
+
+# Logs
+frontend/logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencias
+frontend/node_modules/
+
+# Builds
+frontend/dist/
+frontend/dist-ssr/
+frontend/build/
+
+# Archivos de entorno
+frontend/.env
+frontend/*.local
+
+# === BACKEND (Django) ===
+
+# Entorno virtual
+venv/
+
+# Compilados de Python
+*.py[cod]
+__pycache__/
+*/__pycache__/
+
+# Archivos de base de datos local
+*.sqlite3
+
+# Archivos de entorno
+.env
+
+# Archivos de migraciones innecesarios
+**/migrations/*.pyc
+**/migrations/__pycache__/
+
+# === SISTEMA / EDITORES ===
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+*.lnk
+
+# IDEs y editores
+.vscode/
+.vscode/*    # Configs locales de VSCode
+.idea/       # Configuración de JetBrains (PyCharm/WebStorm)
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# === OTROS ===
+
+# Archivos temporales
+*.bak
+*.tmp
+*.temp
+*.old
+*.orig

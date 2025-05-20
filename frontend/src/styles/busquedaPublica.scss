@@ -1,0 +1,258 @@
+/* ✅ Variables de colores */
+$primary-color: #E81C25;  /* Rojo universitario */
+$text-color: #4d4c4c;
+$background-header: #E81C25; /* Rojo universitario para el encabezado */
+$background-row-hover: #e6f7ff; /* Azul suave en hover de filas */
+$footer-background: linear-gradient(135deg, #b0b0b0, #e0e0e0); /* Degradado para el paginador */
+
+.busqueda-publica {
+  width: 100%;
+  padding: 2rem 10%;
+  max-width: 1200px;
+  padding: 2rem;
+  margin: auto;
+  box-sizing: border-box;
+
+  .logo-container {
+    margin-bottom: 1rem;
+    text-align: center;
+
+    .logo-universidad {
+      height: 70px;
+      object-fit: contain;
+    }
+  }
+
+  h1 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: #4d4c4c;
+    text-align: center;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #4d4c4c;
+  }
+
+  .texto-descripcion {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #4d4c4c;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+
+    .text-blue-600 {
+      display: flex;
+      align-items: center;
+      padding: 4px;
+    }
+  }
+
+  .input-busqueda {
+    width: 500px;
+    margin: auto;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .tabla-resultados {
+    width: 100%;
+    max-width: 1200px;
+    margin: 2rem auto;
+    overflow-x: auto;
+  }
+
+  .info-btn {
+    display: block;
+    width: 200px;
+    margin: 1rem auto;
+    padding: 0.5rem 1rem;
+    background-color: $primary-color;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background-color: #ec9a9a;
+    }
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .modal-contenido {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 500px;
+    text-align: left;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+
+    button.cerrar-btn {
+      background-color: $primary-color;
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      margin-top: 1rem;
+
+      &:hover {
+        background-color: #ec9a9a;
+      }
+    }
+  }
+
+  .mensaje-sin-resultados {
+    padding: 1rem;
+    text-align: center;
+    background-color: #f8d7da;
+    color: #721c24;
+    border-radius: 5px;
+    margin-top: 1rem;
+    border: 1px solid #f5c6cb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    max-width: 500px; /* Limita el ancho máximo si se quiere un tamaño más controlado */
+    margin-left: auto; /* Para centrar el div */
+    margin-right: auto; /* Para centrar el div */
+
+    svg {
+      font-size: 24px;
+    }
+
+    strong {
+      margin-right: 4px;
+    }
+  }
+}
+
+/* ✅ Estilos globales para el DataGrid */
+.mi-data-grid {
+  border: 0;
+  --DataGrid-containerBackground: linear-gradient(to right, #E81C25, #bb504e) !important;
+
+  .MuiDataGrid-columnHeaders {
+    background-color: #E81C25;
+    color: #ffffff;
+  }
+
+  .MuiDataGrid-columnHeaderTitle {
+    font-weight: bold;
+  }
+
+  .MuiDataGrid-row:nth-of-type(odd) {
+    background-color: #f5f5f5;
+  }
+
+  .MuiDataGrid-cell {
+    font-size: 14px;
+  }
+
+  // Estilo para la toolbar
+  .MuiDataGrid-toolbarContainer {
+    background-image: linear-gradient(to right, #C20E1A, #E53935); /* De rojo intenso a rojo brillante */
+    color: #fff;
+    padding: 8px;
+
+    .MuiButtonBase-root,
+    .MuiSvgIcon-root {
+      color: #ffffff !important;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: #ec9a9a !important;
+        border-radius: 4px;
+      }
+    }
+  }
+
+  .MuiTablePagination-root {
+    background-image: linear-gradient(135deg, #b0b0b0, #e0e0e0);
+    color: #4d4e4d;
+    font-weight: bold;
+    border-top: 1px solid #c6c7c6;
+  }
+
+  .custom-data-grid .MuiPaginationItem-root:hover {
+    background-color: #e7e7e7 !important;
+  }
+
+  .MuiInputBase-root {
+    background-color: #ffffff;
+    border-radius: 4px;
+  }
+}
+
+@media (max-width: 768px) {
+  .mi-data-grid {
+    .MuiDataGrid-root {
+      overflow-x: auto;
+    }
+
+    .MuiDataGrid-cell,
+    .MuiDataGrid-columnHeader {
+      font-size: 12px;
+      padding: 4px;
+    }
+
+    .MuiTablePagination-root {
+      font-size: 12px;
+    }
+
+    .MuiDataGrid-toolbarContainer {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 8px;
+    }
+  }
+
+  .busqueda-publica {
+    width: 100%;
+    padding: 1rem;
+
+    .input-busqueda {
+      width: 100%;
+    }
+  }
+}
+
+
+
+
+
+
