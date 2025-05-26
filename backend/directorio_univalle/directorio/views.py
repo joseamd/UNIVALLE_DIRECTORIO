@@ -6,7 +6,7 @@ from django.db.models import Q
 import re
 
 from .models import (
-    Sede, Edificio, Ubicacion,
+    Sede, Ubicacion, Espacio,
     TipoDependencia, Dependencia,
     TipoDocumento, Persona,
     TipoContacto, ContactoPersona, ContactoDependencia,
@@ -19,7 +19,7 @@ from .serializers import (
     TipoVinculacionSerializer, CargoSerializer,
 
     # Entidades
-    SedeSerializer, EdificioSerializer, UbicacionSerializer,
+    SedeSerializer, UbicacionSerializer, EspacioSerializer,
     DependenciaSerializer, PersonaSerializer,
     ContactoPersonaSerializer, ContactoDependenciaSerializer,
     VinculacionSerializer,
@@ -29,8 +29,8 @@ from .serializers import (
 from .busquedas_utils import (
     buscar_personas,
     buscar_dependencias,
+    buscar_ubicaciones,
     buscar_sedes,
-    buscar_edificios
 )
 
 
@@ -38,35 +38,29 @@ class SedeViewSet(viewsets.ModelViewSet):
     queryset = Sede.objects.all()
     serializer_class = SedeSerializer
 
-class EdificioViewSet(viewsets.ModelViewSet):
-    queryset = Edificio.objects.all()
-    serializer_class = EdificioSerializer
-
-
 class UbicacionViewSet(viewsets.ModelViewSet):
     queryset = Ubicacion.objects.all()
     serializer_class = UbicacionSerializer
 
+class EspacioViewSet(viewsets.ModelViewSet):
+    queryset = Espacio.objects.all()
+    serializer_class = EspacioSerializer
 
 class TipoDependenciaViewSet(viewsets.ModelViewSet):
     queryset = TipoDependencia.objects.all()
     serializer_class = TipoDependenciaSerializer
 
-
 class DependenciaViewSet(viewsets.ModelViewSet):
     queryset = Dependencia.objects.all()
     serializer_class = DependenciaSerializer
-
 
 class TipoDocumentoViewSet(viewsets.ModelViewSet):
     queryset = TipoDocumento.objects.all()
     serializer_class = TipoDocumentoSerializer
 
-
 class PersonaViewSet(viewsets.ModelViewSet):
     queryset = Persona.objects.all()
     serializer_class = PersonaSerializer
-
 
 class TipoContactoViewSet(viewsets.ModelViewSet):
     queryset = TipoContacto.objects.all()
@@ -107,6 +101,17 @@ def contiene_caracteres_invalidos(texto):
 @permission_classes([AllowAny])
 def busquedad_publica(request):
     query = request.GET.get('buscar', '').strip()
+    #Filtros avanzados para Personas
+    filtro_cargo = request.GET.get('cargo', '').strip()
+    filtro_correo = request.GET.get('correo', '').strip()
+    filtro_dependencia = request.GET.get('dependencia', '').strip()
+
+    #Filtros avanzados para Dependencias
+    filtro_ubicacion = request.GET.get('ubicacion', '').strip()    
+
+    #Filtros avanzados para Ubicaciones
+    filtro_codigo = request.GET.get('codigo', '').strip()
+    filtro_nombre = request.GET.get('nombre', '').strip()
 
     if contiene_caracteres_invalidos(query):
         return Response({'error': 'Parámetros de búsqueda inválidos.'}, status=400)
@@ -115,15 +120,15 @@ def busquedad_publica(request):
 
     if query:
 
-        data['personas'] = buscar_personas(query)
-        data['dependencias'] = buscar_dependencias(query)
-        data['sedes'] = buscar_sedes(query)
-        data['edificios'] = buscar_edificios(query)
+        data['personas'] = buscar_personas(query, filtro_cargo, filtro_correo, filtro_dependencia)
+        data['dependencias'] = buscar_dependencias(query, filtro_ubicacion)
+        data['sedes'] = buscar_sedes(query)   
+        data['ubicaciones'] = buscar_ubicaciones(query, filtro_codigo, filtro_nombre)     
     else:
         # Si el query está vacío, devolver un array vacío o no hacer la consulta
         data['personas'] = []
         data['dependencias'] = []
         data['sedes'] = []
-        data['edificios'] = []
+        data['ubicaciones'] = []
         
     return Response(data)

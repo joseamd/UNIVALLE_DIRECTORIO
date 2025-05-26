@@ -31,10 +31,10 @@ const AppRouter = () => {
             </Route>
 
             {/* Ruta para Edificios */}
-            <Route path="edificio">
-              <Route index element={<List endpoint="edificio" />} />
-              <Route path=":edificioId" element={<Single endpoint="edificio" />} />
-              <Route path="new" element={<New endpoint="edificio" />} />
+            <Route path="espacio">
+              <Route index element={<List endpoint="Espacio" />} />
+              <Route path=":EspacioId" element={<Single endpoint="Espacio" />} />
+              <Route path="new" element={<New endpoint="Espacio" />} />
             </Route>
 
             {/* Ruta para Ubicaciones */}

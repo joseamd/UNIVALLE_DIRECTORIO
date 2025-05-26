@@ -7,6 +7,7 @@ import '../../styles/BusquedaPublica.scss';
 
 
 const ResultadosLista = ({ datos, categoria, busqueda  }) => {
+  console.log('Datos recibidos para mostrar:', datos);
   const [paginationModel, setPaginationModel] = useState({pageSize: 10, page: 0, });
 
   // Si no hay búsqueda (menos de 3 caracteres), no mostramos nada
@@ -35,7 +36,7 @@ const ResultadosLista = ({ datos, categoria, busqueda  }) => {
         localeText={localeTextES}    //idioma español 
         paginationModel={paginationModel}
         onPaginationModelChange={(newModel) => setPaginationModel(newModel)}
-        pageSizeOptions={[5, 10, 20]}
+        pageSizeOptions={[5, 10]}
         // slots={{ toolbar: GridToolbar }}
         //   slotProps={{
         //     toolbar: {

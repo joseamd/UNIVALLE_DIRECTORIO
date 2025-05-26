@@ -20,8 +20,8 @@ class AuditoriaBase(models.Model):
 # -------------------------
 
 class Sede(AuditoriaBase):
-    nombre = models.CharField(max_length=150)
-    ciudad = models.CharField(max_length=100)
+    nombre = models.CharField(max_length=255)
+    ciudad = models.CharField(max_length=150)
     direccion = models.CharField(max_length=255)
 
     def __str__(self):
@@ -33,48 +33,55 @@ class Sede(AuditoriaBase):
         ordering = ['nombre']
 
 
-class Edificio(AuditoriaBase):
-    sede = models.ForeignKey(Sede, on_delete=models.PROTECT, related_name='edificios')
-    codigo = models.CharField(max_length=20, unique=True)
-    nombre = models.CharField(max_length=150)    
-
-    def __str__(self):
-        return f"{self.codigo} - {self.nombre}"
-    
-    class Meta:
-        ordering = ['sede__nombre', 'codigo']
-
-
 class Ubicacion(AuditoriaBase):
-    edificio = models.OneToOneField(Edificio, on_delete=models.PROTECT, related_name='ubicacion')
-    piso = models.IntegerField()
+    sede = models.ForeignKey(Sede, on_delete=models.PROTECT, related_name='ubicacion')
+    edificio_codigo = models.CharField(max_length=50)
+    edificio_nombre = models.CharField(max_length=150) 
+    num_piso = models.IntegerField()  # número total de pisos
     latitud = models.FloatField()
     longitud = models.FloatField()
 
     def __str__(self):
-        return f"{self.edificio.codigo} Piso {self.piso}"
+        return f"{self.edificio_codigo} - {self.edificio_nombre} ({self.num_piso} pisos)"
     
     class Meta:
         verbose_name = "Ubicación"
         verbose_name_plural = "Ubicaciones"
+        unique_together = [('sede', 'edificio_codigo')]  # No se repita código de edificio en una misma sede
+        ordering = ['edificio_nombre', 'edificio_codigo']
+		
+		
+class Espacio(AuditoriaBase):
+    espacio_codigo = models.CharField(max_length=50)
+    espacio_nombre = models.CharField(max_length=255) 
+
+    def __str__(self):
+        return self.espacio_nombre
+    
+    class Meta:
+        verbose_name = "Espacio"
+        verbose_name_plural = "Espacios"
+        ordering = ['espacio_nombre']
     
 
 # -------------------------
 # Catálogos básicos
 # -------------------------
 class TipoDependencia(models.Model):
-    nombre = models.CharField(max_length=100)
+    nombre = models.CharField(max_length=255)
     descripcion = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.nombre
     
     class Meta:
+        verbose_name = "Tipo de dependencia"
+        verbose_name_plural = "Tipos de dependencia"
         ordering = ['nombre']
 
 
 class TipoDocumento(models.Model):
-    nombre = models.CharField(max_length=10)  # Ej: 'C.C.'
+    nombre = models.CharField(max_length=50)  # Ej: 'C.C.'
     descripcion = models.TextField(blank=True, null=True)
 
     def __str__(self):
@@ -87,7 +94,7 @@ class TipoDocumento(models.Model):
 
 
 class TipoContacto(models.Model):
-    nombre = models.CharField(max_length=50)
+    nombre = models.CharField(max_length=255)
     descripcion = models.TextField(blank=True, null=True)
 
     def __str__(self):
@@ -100,7 +107,7 @@ class TipoContacto(models.Model):
 
 
 class TipoVinculacion(models.Model):
-    nombre = models.CharField(max_length=100)
+    nombre = models.CharField(max_length=255)
     descripcion = models.TextField(blank=True, null=True)
 
     def __str__(self):
@@ -113,7 +120,7 @@ class TipoVinculacion(models.Model):
 
 
 class Cargo(models.Model):
-    nombre = models.CharField(max_length=100)
+    nombre = models.CharField(max_length=255)
     descripcion = models.TextField(blank=True, null=True)    
 
     def __str__(self):
@@ -129,15 +136,18 @@ class Cargo(models.Model):
 # -------------------------
 
 class Dependencia(AuditoriaBase):
-    nombre = models.CharField(max_length=150)
+    nombre = models.CharField(max_length=255)
     tipo_dependencia = models.ForeignKey(TipoDependencia, on_delete=models.CASCADE, related_name='dependencias')
     dependencia_padre = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='sub_dependencias')
     ubicacion = models.ForeignKey(Ubicacion, on_delete=models.SET_NULL, related_name='dependencias', null=True, blank=True)
+    piso_ubicacion = models.IntegerField(blank=True, null=True)   # Piso donde se ubica la Dependencia
 
     def __str__(self):
         return self.nombre
     
     class Meta:
+        verbose_name = "Dependencia"
+        verbose_name_plural = "Dependencias"
         ordering = ['nombre']
 
 
@@ -147,11 +157,11 @@ class Dependencia(AuditoriaBase):
 
 class Persona(AuditoriaBase):
     tipo_documento = models.ForeignKey('TipoDocumento', on_delete=models.PROTECT)
-    numero_documento = models.CharField(max_length=50, unique=True)
-    primer_nombre = models.CharField(max_length=50)
-    segundo_nombre = models.CharField(max_length=50, blank=True, null=True)
-    primer_apellido = models.CharField(max_length=50)
-    segundo_apellido = models.CharField(max_length=50, blank=True, null=True)    
+    numero_documento = models.CharField(max_length=100, unique=True)
+    primer_nombre = models.CharField(max_length=100)
+    segundo_nombre = models.CharField(max_length=100, blank=True, null=True)
+    primer_apellido = models.CharField(max_length=100)
+    segundo_apellido = models.CharField(max_length=100, blank=True, null=True)    
 
     @property
     def nombre_completo(self):
@@ -171,26 +181,30 @@ class Persona(AuditoriaBase):
 class ContactoPersona(AuditoriaBase):
     persona = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='contactos')
     tipo_contacto = models.ForeignKey(TipoContacto, on_delete=models.PROTECT)
-    valor = models.CharField(max_length=100)
+    valor = models.CharField(max_length=255)
     extension = models.CharField(max_length=10, blank=True, null=True)
 
     def __str__(self):
         return f"{self.valor} ({self.tipo_contacto.nombre})"
     
     class Meta:
+        verbose_name = "Contacto de persona"
+        verbose_name_plural = "Contactos de personas"
         ordering = ['tipo_contacto__nombre', 'valor']
 
 
 class ContactoDependencia(AuditoriaBase):
     dependencia = models.ForeignKey(Dependencia, on_delete=models.CASCADE, related_name='contactos')
     tipo_contacto = models.ForeignKey(TipoContacto, on_delete=models.PROTECT)
-    valor = models.CharField(max_length=100)
+    valor = models.CharField(max_length=255)
     extension = models.CharField(max_length=10, blank=True, null=True)
 
     def __str__(self):
         return f"{self.valor} ({self.tipo_contacto.nombre})"
     
     class Meta:
+        verbose_name = "Contacto de dependencia"
+        verbose_name_plural = "Contactos de dependencias"
         ordering = ['tipo_contacto__nombre', 'valor']
 
 # -------------------------

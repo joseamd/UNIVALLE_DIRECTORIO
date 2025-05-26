@@ -6,8 +6,8 @@ from .views import *
 
 router = DefaultRouter()
 router.register(r'sedes', SedeViewSet)
-router.register(r'edificios', EdificioViewSet)
 router.register(r'ubicaciones', UbicacionViewSet)
+router.register(r'espacios', EspacioViewSet)
 router.register(r'tipo-dependencias', TipoDependenciaViewSet)
 router.register(r'dependencias', DependenciaViewSet)
 router.register(r'tipo-documentos', TipoDocumentoViewSet)

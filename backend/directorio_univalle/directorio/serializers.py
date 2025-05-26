@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import (
-    Sede, Edificio, Ubicacion,
+    Sede, Ubicacion, Espacio,
     TipoDependencia, Dependencia,
     TipoDocumento, Persona,
     TipoContacto, ContactoPersona, ContactoDependencia,
@@ -45,18 +45,17 @@ class SedeSerializer(serializers.ModelSerializer):
         model = Sede
         fields = '__all__'
 
-
-class EdificioSerializer(serializers.ModelSerializer):
-    sede = serializers.PrimaryKeyRelatedField(queryset=Sede.objects.all()) # Esto incluye el objeto completo de la sede en el edificio
+class EspacioSerializer(serializers.ModelSerializer):
+    codigo = serializers.CharField(source='espacio_codigo')
+    nombre = serializers.CharField(source='espacio_nombre')
+    sede = serializers.PrimaryKeyRelatedField(queryset=Sede.objects.all())
 
     class Meta:
-        model = Edificio
-        fields = '__all__'
-
+        model = Espacio
+        fields = ['id', 'codigo', 'nombre', 'sede']
 
 class UbicacionSerializer(serializers.ModelSerializer):
-    edificio = serializers.PrimaryKeyRelatedField(queryset=Edificio.objects.all())
-
+    sede = serializers.PrimaryKeyRelatedField(queryset=Sede.objects.all()) # Esto incluye el objeto completo de la sede en la ubicacion
     class Meta:
         model = Ubicacion
         fields = '__all__'
@@ -85,9 +84,6 @@ class PersonaSerializer(serializers.ModelSerializer):
         model = Persona
         fields = '__all__'
 
-
-class BaseContactoSerializer(serializers.ModelSerializer):
-    tipo_contacto = serializers.PrimaryKeyRelatedField(queryset=TipoContacto.objects.all())
 
 class ContactoPersonaSerializer(serializers.ModelSerializer):
     persona = serializers.PrimaryKeyRelatedField(queryset=Persona.objects.all())
@@ -125,7 +121,7 @@ class VinculacionSerializer(serializers.ModelSerializer):
 class DependenciaBusquedaPublicaSerializer(serializers.ModelSerializer):
     contactos_dependencia = serializers.SerializerMethodField()
     sede = serializers.SerializerMethodField()
-    edificio = serializers.SerializerMethodField()
+    ubicacion = serializers.SerializerMethodField()
 
     class Meta:
         model = Dependencia
@@ -142,7 +138,7 @@ class DependenciaBusquedaPublicaSerializer(serializers.ModelSerializer):
 
     def get_sede(self, obj):
         try:
-            sede = obj.ubicacion.edificio.sede
+            sede = obj.ubicacion.sede
             return {
                 'id': sede.id,
                 'nombre': sede.nombre,
@@ -152,13 +148,13 @@ class DependenciaBusquedaPublicaSerializer(serializers.ModelSerializer):
         except AttributeError:
             return None
 
-    def get_edificio(self, obj):
+    def get_ubicacion(self, obj):
         try:
-            edificio = obj.ubicacion.edificio
+            ubicacion = obj.ubicacion
             return {
-                'id': edificio.id,
-                'codigo': edificio.codigo,
-                'nombre': edificio.nombre
+                'id': ubicacion.id,
+                'codigo': ubicacion.edificio_codigo,
+                'nombre': ubicacion.edificio_nombre
             }
         except AttributeError:
             return None        
@@ -170,13 +166,13 @@ class PersonaBusquedaPublicaSerializer(serializers.ModelSerializer):
     dependencia = serializers.SerializerMethodField()
     contactos_persona = serializers.SerializerMethodField()
     sede = serializers.SerializerMethodField()
-    edificio = serializers.SerializerMethodField()
+    ubicacion = serializers.SerializerMethodField()
 
     class Meta:
         model = Persona
         fields = [
             'id', 'nombre', 'cargo', 'dependencia',
-            'contactos_persona', 'sede', 'edificio'
+            'contactos_persona', 'sede', 'ubicacion'
         ]
 
     def to_representation(self, instance):
@@ -231,24 +227,30 @@ class PersonaBusquedaPublicaSerializer(serializers.ModelSerializer):
             return None        
 
 
-    def get_edificio(self, obj):
+    def get_ubicacion(self, obj):
         vinculacion = self.get_vinculacion(obj)
         try:
-            edificio = vinculacion.dependencia.ubicacion.edificio
-            sede = edificio.sede
+            ubicacion = vinculacion.dependencia.ubicacion
+            sede = ubicacion.sede
             return {
-                'codigo': edificio.codigo,
-                'nombre': edificio.nombre,
-                'sede': sede.nombre if sede else None
+                'codigo': ubicacion.edificio_codigo,
+                'nombre': ubicacion.edificio_nombre,
+                'sede': {
+                    'nombre': sede.nombre,
+                    'direccion': sede.direccion,
+                    'ciudad': sede.ciudad
+                } if sede else None
             }
         except AttributeError:
             return None
         
-class EdificioConSedeSerializer(serializers.ModelSerializer):
+class UbicacionConSedeSerializer(serializers.ModelSerializer):
+    codigo = serializers.CharField(source='edificio_codigo')
+    nombre = serializers.CharField(source='edificio_nombre')
     sede = serializers.SerializerMethodField()
 
     class Meta:
-        model = Edificio
+        model = Ubicacion
         fields = ['id', 'codigo', 'nombre', 'sede']
 
     def get_sede(self, obj):

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import (
-    Sede, Edificio, Ubicacion,
+    Sede, Ubicacion, Espacio,
     TipoDependencia, TipoDocumento, TipoContacto, TipoVinculacion, Cargo,
     Dependencia,
     Persona, ContactoPersona, ContactoDependencia,
@@ -31,20 +31,18 @@ class SedeAdmin(admin.ModelAdmin):
     search_fields = ('nombre', 'ciudad')
 
 
-@admin.register(Edificio)
-class EdificioAdmin(admin.ModelAdmin):
-    list_display = ('codigo', 'nombre', 'sede')
-    search_fields = ('codigo', 'nombre')
-    list_filter = ('sede',)
-    autocomplete_fields = ('sede',)
-
-
 @admin.register(Ubicacion)
 class UbicacionAdmin(admin.ModelAdmin):
-    list_display = ('edificio', 'piso', 'latitud', 'longitud')
-    list_filter = ('piso',)
-    autocomplete_fields = ('edificio',)
-    search_fields = ('edificio__nombre', 'edificio__codigo')
+    list_display = ('edificio_codigo','edificio_nombre', 'num_piso', 'latitud', 'longitud')
+    list_filter = ('sede',)
+    autocomplete_fields = ('sede',)
+    search_fields = ('edificio_nombre', 'edificio_codigo')
+
+
+@admin.register(Espacio)
+class EspacioAdmin(admin.ModelAdmin):
+    list_display = ('espacio_codigo', 'espacio_nombre')
+    search_fields = ('espacio_codigo', 'espacio_nombre')
 
 
 # ---------------------------

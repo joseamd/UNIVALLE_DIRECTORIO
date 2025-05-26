@@ -8,11 +8,11 @@ import {
 } from '../services/sede';
 
 import {
-  getEdificios,
-  createEdificio,
-  updateEdificio,
-  deleteEdificio
-} from '../services/edificio';
+  getEspacios,
+  createEspacio,
+  updateEspacio,
+  deleteEspacio
+} from '../services/espacio';
 
 import {
   getUbicaciones,
@@ -112,8 +112,8 @@ export const tableConfigs = {
     updateRow: updateSede,
     deleteRow: deleteSede,
   },
-  edificio: {
-    title: 'Gestión de Edificio',
+  espacio: {
+    title: 'Gestión de Espacio',
     columns: [
       { field: 'sede', headerName: 'Sede' },
       { field: 'codigo', headerName: 'Codigo' },
@@ -137,10 +137,10 @@ export const tableConfigs = {
       { name: 'codigo', label: 'Codigo', required: true },
       { name: 'nombre', label: 'Nombre', required: true },
     ],
-    getData: getEdificios,
-    createRow: createEdificio,
-    updateRow: updateEdificio,
-    deleteRow: deleteEdificio,
+    getData: getEspacios,
+    createRow: createEspacio,
+    updateRow: updateEspacio,
+    deleteRow: deleteEspacio,
   },
   ubicacion: {
     title: 'Gestión de Ubicacion',

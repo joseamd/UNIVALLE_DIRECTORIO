@@ -35,14 +35,14 @@ export const menuConfig = [
         icon: <LocationCityIcon className="icon" />,
       },
       {
-        name: "Edificios",
-        path: "/edificio", // Actualización aquí
-        icon: <ApartmentIcon className="icon" />,
+        name: "Espacios",
+        path: "/espacio", // Actualización aquí
+        icon: <PlaceIcon className="icon" />,
       },
       {
         name: "Ubicaciones",
         path: "/ubicacion", // Actualización aquí
-        icon: <PlaceIcon className="icon" />,
+        icon: <ApartmentIcon className="icon" />,
       },
     ],
   },

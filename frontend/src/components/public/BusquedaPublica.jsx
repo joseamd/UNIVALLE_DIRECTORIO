@@ -7,7 +7,13 @@ import logo from '@/assets/logo.jpg';
 import { Info } from "lucide-react";
 import CustomSnackbar from '../genericTable/CustomSnackbar';
 
-const categorias = ['personas', 'dependencias', 'edificios', 'sedes'];
+const categorias = ['personas', 'dependencias', 'ubicaciones', 'sedes'];
+const filtrosDisponibles = {
+  personas: ['nombre', 'correo', 'cargo', 'dependencia'],
+  dependencias: ['nombre'],
+  ubicaciones: ['nombre'],
+  sedes: ['nombre', 'ciudad']
+};
 
 const BusquedaPublicaTabs = () => {
   const [query, setQuery] = useState('');
@@ -18,6 +24,10 @@ const BusquedaPublicaTabs = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('info');
+
+  // Filtros
+  const [columnaFiltro, setColumnaFiltro] = useState('');
+  const [valorFiltro, setValorFiltro] = useState('');
 
 const showSnackbar = (message, severity = 'info') => {
   setSnackbarMessage(message);
@@ -39,8 +49,17 @@ const handleCloseSnackbar = (_, reason) => {
       }
         
       setLoading(true);
-      buscarPublica(query, 1)
-        .then(res => setResults(res.data))
+      // Preparar filtros adicionales si están seleccionados
+      const filtros = {};
+      if (columnaFiltro && valorFiltro) {
+        filtros[columnaFiltro] = valorFiltro;
+      }
+
+      buscarPublica(query, 1, filtros)
+        .then(res => {
+          console.log('Respuesta API:', res.data);  // Ver estructura aquí
+          setResults(res.data);
+        })
         .catch(err => {
           console.error('Error en búsqueda:', err);
           setResults({});
@@ -49,7 +68,7 @@ const handleCloseSnackbar = (_, reason) => {
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [query]);
+  }, [query, valorFiltro, columnaFiltro]);
 
   const validarQuery = (texto) => {
     const regex = /^[a-zA-Z0-9áéíóúüÁÉÍÓÚÜÑñ\s.,@-]*$/;
@@ -82,6 +101,30 @@ const handleCloseSnackbar = (_, reason) => {
           sx={{ marginBottom: 2 }}
         />
 
+        {/* Sección de filtros avanzados */}
+        <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+          <select
+            value={columnaFiltro}
+            onChange={(e) => setColumnaFiltro(e.target.value)}
+          >
+            <option value="">Filtrar por columna...</option>
+            {filtrosDisponibles[categoria].map((col) => (
+              <option key={col} value={col}>
+                {col.charAt(0).toUpperCase() + col.slice(1)}
+              </option>
+            ))}
+          </select>
+
+          <TextField
+            label="Valor del filtro"
+            variant="outlined"
+            size="small"
+            value={valorFiltro}
+            onChange={(e) => setValorFiltro(e.target.value)}
+            disabled={!columnaFiltro}
+          />
+        </div>
+
         <button className="info-btn" onClick={() => setShowModal(true)}>
           <Info className="inline mr-1" size={18} />
           Información de uso
@@ -90,7 +133,11 @@ const handleCloseSnackbar = (_, reason) => {
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <Tabs
             value={categoria}
-            onChange={(e, newValue) => setCategoria(newValue)}
+            onChange={(e, newValue) => {
+              setCategoria(newValue);
+              setColumnaFiltro('');
+              setValorFiltro('');
+            }}
             variant="scrollable"
             allowScrollButtonsMobile
           >
