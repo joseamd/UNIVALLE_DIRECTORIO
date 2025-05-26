@@ -1,19 +1,5 @@
 from django.db import models
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
-
-
-# -------------------------
-# Auditoria
-# -------------------------
-class AuditoriaBase(models.Model):
-    created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    updated = models.DateTimeField(auto_now=True, null=True, blank=True)
-    usuario = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
-
-    class Meta:
-        abstract = True
+from core.models import AuditoriaBase
 
 # -------------------------
 # Entidades institucionales

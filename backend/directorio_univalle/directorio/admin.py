@@ -29,6 +29,7 @@ class CatalogoAdmin(admin.ModelAdmin):
 class SedeAdmin(admin.ModelAdmin):
     list_display = ('nombre', 'ciudad', 'direccion')
     search_fields = ('nombre', 'ciudad')
+    readonly_fields = ('user_creation', 'user_updated')
 
 
 @admin.register(Ubicacion)
@@ -37,12 +38,14 @@ class UbicacionAdmin(admin.ModelAdmin):
     list_filter = ('sede',)
     autocomplete_fields = ('sede',)
     search_fields = ('edificio_nombre', 'edificio_codigo')
+    readonly_fields = ('user_creation', 'user_updated')
 
 
 @admin.register(Espacio)
 class EspacioAdmin(admin.ModelAdmin):
     list_display = ('espacio_codigo', 'espacio_nombre')
     search_fields = ('espacio_codigo', 'espacio_nombre')
+    readonly_fields = ('user_creation', 'user_updated')
 
 
 # ---------------------------
@@ -55,7 +58,7 @@ class DependenciaAdmin(admin.ModelAdmin):
     search_fields = ('nombre',)
     list_filter = ('tipo_dependencia',)
     autocomplete_fields = ('dependencia_padre', 'ubicacion')
-
+    readonly_fields = ('user_creation', 'user_updated')
 
 # ---------------------------
 # Personas y contactos
@@ -70,6 +73,7 @@ class PersonaAdmin(admin.ModelAdmin):
     )
     list_filter = ('tipo_documento',)
     autocomplete_fields = ('tipo_documento',)
+    readonly_fields = ('user_creation', 'user_updated')
 
 
 @admin.register(ContactoPersona)
@@ -78,7 +82,7 @@ class ContactoPersonaAdmin(admin.ModelAdmin):
     search_fields = ('valor', 'persona__primer_nombre', 'persona__primer_apellido',)
     list_filter = ('tipo_contacto',)
     autocomplete_fields = ('persona', 'tipo_contacto')
-
+    readonly_fields = ('user_creation', 'user_updated')
 
 @admin.register(ContactoDependencia)
 class ContactoDependenciaAdmin(admin.ModelAdmin):
@@ -86,7 +90,7 @@ class ContactoDependenciaAdmin(admin.ModelAdmin):
     search_fields = ('valor',)
     list_filter = ('tipo_contacto',)
     autocomplete_fields = ('dependencia', 'tipo_contacto')
-
+    readonly_fields = ('user_creation', 'user_updated')
 
 # ---------------------------
 # Vinculaciones
@@ -98,6 +102,7 @@ class VinculacionAdmin(admin.ModelAdmin):
     list_filter = ('estado_laboral', 'tipo_vinculacion', 'cargo', 'dependencia')
     search_fields = ('persona__primer_nombre', 'persona__primer_apellido', 'persona__numero_documento')
     date_hierarchy = 'fecha_inicio'
+    readonly_fields = ('user_creation', 'user_updated')
 
     def get_nombre_persona(self, obj):
         return obj.persona.nombre_completo
