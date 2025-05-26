@@ -1,5 +1,6 @@
 from django.db import models
 from core.models import AuditoriaBase
+from auditlog.registry import auditlog
 
 # -------------------------
 # Entidades institucionales
@@ -218,3 +219,20 @@ class Vinculacion(AuditoriaBase):
         verbose_name = "Vinculacion"
         verbose_name_plural = "Vinculaciones"
         ordering = ['-fecha_inicio', 'persona__primer_apellido']
+
+
+
+auditlog.register(Sede)
+auditlog.register(Ubicacion)
+auditlog.register(Espacio)
+auditlog.register(Dependencia)
+auditlog.register(Persona)
+auditlog.register(ContactoPersona)
+auditlog.register(ContactoDependencia)
+auditlog.register(Vinculacion)
+
+auditlog.register(TipoDependencia)
+auditlog.register(TipoDocumento)
+auditlog.register(TipoContacto)
+auditlog.register(TipoVinculacion)
+auditlog.register(Cargo)

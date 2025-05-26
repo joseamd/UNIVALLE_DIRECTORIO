@@ -1,4 +1,6 @@
 from django.contrib import admin
+from auditlog.models import LogEntry
+from auditlog.admin import LogEntryAdmin as BaseLogEntryAdmin
 from .models import (
     Sede, Ubicacion, Espacio,
     TipoDependencia, TipoDocumento, TipoContacto, TipoVinculacion, Cargo,
@@ -6,6 +8,30 @@ from .models import (
     Persona, ContactoPersona, ContactoDependencia,
     Vinculacion
 )
+
+# ---------------------------
+# Auditoría con Auditlog
+# ---------------------------
+
+# Desregistrar si fue registrado automáticamente
+try:
+    admin.site.unregister(LogEntry)
+except admin.sites.NotRegistered:
+    pass  # No estaba registrado aún
+
+# Crear una clase admin más descriptiva
+@admin.register(LogEntry)
+class CustomLogEntryAdmin(BaseLogEntryAdmin):
+    list_display = ('timestamp', 'actor', 'content_type', 'object_repr', 'action', 'changes_summary')
+    list_filter = ('content_type', 'action', 'actor')
+    search_fields = ('object_repr', 'changes')
+
+    def changes_summary(self, obj):
+        """Resumen amigable de los cambios."""
+        if isinstance(obj.changes, dict):
+            return ", ".join(obj.changes.keys())
+        return ""
+    changes_summary.short_description = "Campos modificados"
 
 # ---------------------------
 # Catálogos básicos
