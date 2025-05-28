@@ -20,7 +20,5 @@ router.register(r'cargos', CargoViewSet)
 router.register(r'vinculaciones', VinculacionViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
-    path('publica/buscar/', busquedad_publica),
-    # Nueva ruta para búsqueda pública de funcionarios
+    path('admin/', include(router.urls)),
 ]

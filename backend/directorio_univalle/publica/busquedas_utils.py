@@ -3,11 +3,12 @@
 from django.db.models import Q
 from directorio.models import Persona, Dependencia, Sede, Ubicacion
 from .serializers import (   
-
     # Búsqueda pública
     PersonaBusquedaPublicaSerializer,
     DependenciaBusquedaPublicaSerializer,
     UbicacionConSedeSerializer,
+)
+from directorio.serializers import (
     SedeSerializer
 )
 
