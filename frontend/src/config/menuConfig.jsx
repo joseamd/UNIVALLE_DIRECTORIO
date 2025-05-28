@@ -15,13 +15,16 @@ import ContactsIcon from '@mui/icons-material/Contacts';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 
+const adminBase = "/directorio/admin";
+
 export const menuConfig = [
+  
   {
     section: "Principal",
     items: [
       {
         name: "Dashboard",
-        path: "/",
+        path: `${adminBase}/`,
         icon: <DashboardIcon className="icon" />,
       },
     ],
@@ -31,17 +34,17 @@ export const menuConfig = [
     items: [
       {
         name: "Sedes",
-        path: "/sede", // Actualización aquí
+        path: `${adminBase}/sede`, // Actualización aquí
         icon: <LocationCityIcon className="icon" />,
       },
       {
         name: "Espacios",
-        path: "/espacio", // Actualización aquí
+        path: `${adminBase}/espacio`, // Actualización aquí
         icon: <PlaceIcon className="icon" />,
       },
       {
         name: "Ubicaciones",
-        path: "/ubicacion", // Actualización aquí
+        path: `${adminBase}/ubicacion`, // Actualización aquí
         icon: <ApartmentIcon className="icon" />,
       },
     ],
@@ -51,12 +54,12 @@ export const menuConfig = [
     items: [
       {
         name: "Tipo Dependencias",
-        path: "/tipodependencia", // Actualización aquí
+        path: `${adminBase}/tipodependencia`, // Actualización aquí
         icon: <CategoryIcon className="icon" />,
       },
       {
         name: "Dependencias",
-        path: "/dependencia", // Actualización aquí
+        path: `${adminBase}/dependencia`, // Actualización aquí
         icon: <CorporateFareIcon className="icon" />,
       },
     ],
@@ -66,22 +69,22 @@ export const menuConfig = [
     items: [
       {
         name: "Personas",
-        path: "/persona", // Actualización aquí
+        path: `${adminBase}/persona`, // Actualización aquí
         icon: <BadgeIcon className="icon" />,
       },
       {
         name: "Vinculaciones",
-        path: "/vinculacion", // Actualización aquí
+        path: `${adminBase}/vinculacion`, // Actualización aquí
         icon: <AssignmentIndIcon className="icon" />,
       },
       {
         name: "Tipo Vinculación",
-        path: "/tipovinculacion", // Actualización aquí
+        path: `${adminBase}/tipovinculacion`, // Actualización aquí
         icon: <LinkIcon className="icon" />,
       },
       {
         name: "Cargos",
-        path: "/cargo", // Actualización aquí
+        path: `${adminBase}/cargo`, // Actualización aquí
         icon: <WorkOutlineIcon className="icon" />,
       },
     ],
@@ -91,22 +94,22 @@ export const menuConfig = [
     items: [
       {
         name: "Tipo Documentos",
-        path: "/tipodocumento", // Actualización aquí
+        path: `${adminBase}/tipodocumento`, // Actualización aquí
         icon: <DescriptionIcon className="icon" />,
       },
       {
         name: "Tipo Contactos",
-        path: "/tipocontacto", // Actualización aquí
+        path: `${adminBase}/tipocontacto`, // Actualización aquí
         icon: <MailIcon className="icon" />,
       },
       {
         name: "Contactos Persona",
-        path: "/contactopersona", // Actualización aquí
+        path: `${adminBase}/contactopersona`, // Actualización aquí
         icon: <ContactsIcon className="icon" />,
       },
       {
         name: "Contactos Dependencia",
-        path: "/contactodependencia", // Actualización aquí
+        path: `${adminBase}/contactodependencia`, // Actualización aquí
         icon: <ContactsIcon className="icon" />,
       },
     ],

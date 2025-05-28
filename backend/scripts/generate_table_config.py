@@ -85,7 +85,7 @@ def generate_service_files(table_configs, custom_routes):
 
         with open(service_file, 'w', encoding='utf-8') as f:
             f.write("import axios from 'axios';\n\n")
-            f.write(f"const API_URL = 'http://127.0.0.1:8000/directorio/{model_plural}/';\n\n")
+            f.write(f"const API_URL = 'http://127.0.0.1:8000/directorio/admin/{model_plural}/';\n\n")
             f.write(f"export const get{function_plural} = () => axios.get(API_URL);\n\n")
             f.write(f"export const get{model} = (id) => axios.get(`${{API_URL}}${{id}}/`);\n\n")
             f.write(f"export const create{model} = (data) => axios.post(API_URL, data);\n\n")

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://127.0.0.1:8000/directorio/cargos/';
+const API_URL = 'http://127.0.0.1:8000/directorio/admin/cargos/';
 
 export const getCargos = () => axios.get(API_URL);
 

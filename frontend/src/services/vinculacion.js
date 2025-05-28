@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://127.0.0.1:8000/directorio/vinculaciones/';
+const API_URL = 'http://127.0.0.1:8000/directorio/admin/vinculaciones/';
 
 export const getVinculaciones = () => axios.get(API_URL);
 

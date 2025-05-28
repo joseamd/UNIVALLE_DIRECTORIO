@@ -4,7 +4,7 @@ import GenericTable from '../../components/genericTable/GenericTable';
 
 const List = () => {
   const path = useLocation().pathname;
-  const type = path.split('/')[1]; // "funcionarios", "dependencias", etc.
+  const type = path.split('directorio/admin/')[1]; // "funcionarios", "dependencias", etc.
 
   return (
     <div className="listContainer">
