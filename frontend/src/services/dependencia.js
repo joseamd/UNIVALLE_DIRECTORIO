@@ -11,3 +11,5 @@ export const createDependencia = (data) => axios.post(API_URL, data);
 export const updateDependencia = (id, data) => axios.put(`${API_URL}${id}/`, data);
 
 export const deleteDependencia = (id) => axios.delete(`${API_URL}${id}/`);
+
+export const getDependenciasHijas = () => axios.get(`${API_URL}hijas/`);

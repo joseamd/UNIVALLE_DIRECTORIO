@@ -1,4 +1,6 @@
 from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
  
 from .models import (
     Sede, Ubicacion, Espacio,
@@ -39,6 +41,12 @@ class TipoDependenciaViewSet(viewsets.ModelViewSet):
 class DependenciaViewSet(viewsets.ModelViewSet):
     queryset = Dependencia.objects.all()
     serializer_class = DependenciaSerializer
+
+    @action(detail=False, methods=['get'])
+    def hijas(self, request):
+        hijas = Dependencia.objects.exclude(dependencia_padre=None)
+        serializer = self.get_serializer(hijas, many=True)
+        return Response(serializer.data)
 
 class TipoDocumentoViewSet(viewsets.ModelViewSet):
     queryset = TipoDocumento.objects.all()

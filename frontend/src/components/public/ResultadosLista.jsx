@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
+import { esES } from '@mui/x-data-grid/locales'; // Traducciones
+import {
+  DataGrid,
+  GridToolbarColumnsButton,
+  GridToolbarDensitySelector,
+  GridToolbarQuickFilter,
+} from '@mui/x-data-grid';
+
 import { columnasPorCategoria } from '../../config/columnasPorCategoria';
-import localeTextES from '../../utils/localeTextES';        // Traducciones
 import SinResultados from './SinResultados';
 import '../../styles/BusquedaPublica.scss';
 
 
 const ResultadosLista = ({ datos, categoria, busqueda  }) => {
-  console.log('Datos recibidos para mostrar:', datos);
+  //console.log('Datos recibidos para mostrar:', datos);
   const [paginationModel, setPaginationModel] = useState({pageSize: 10, page: 0, });
 
   // Si no hay búsqueda (menos de 3 caracteres), no mostramos nada
@@ -26,6 +32,18 @@ const ResultadosLista = ({ datos, categoria, busqueda  }) => {
 
   const columnas = columnasPorCategoria[categoria] || [];
   
+  // Toolbar personalizada con filtros, columnas, densidad y filtro rápido
+  function CustomToolbar() {
+    return (
+      <div className="mi-toolbar">
+          <div className="mi-toolbar-botones">
+            <GridToolbarColumnsButton />
+            <GridToolbarDensitySelector />
+          </div>
+          <GridToolbarQuickFilter debounceMs={500} />
+        </div>
+    );
+  }
 
   return (
     <div className="tabla-resultados">
@@ -33,17 +51,11 @@ const ResultadosLista = ({ datos, categoria, busqueda  }) => {
         className="mi-data-grid"
         rows={datos.map((item, index) => ({ id: index, ...item }))}
         columns={columnas}
-        localeText={localeTextES}    //idioma español 
+        localeText={esES.components.MuiDataGrid.defaultProps.localeText}   //idioma español 
         paginationModel={paginationModel}
         onPaginationModelChange={(newModel) => setPaginationModel(newModel)}
         pageSizeOptions={[5, 10]}
-        // slots={{ toolbar: GridToolbar }}
-        //   slotProps={{
-        //     toolbar: {
-        //       showQuickFilter: true,
-        //       quickFilterProps: { debounceMs: 500 },
-        //     },
-        //   }}
+        slots={{ toolbar: CustomToolbar }}        
       />      
     </div>
   );

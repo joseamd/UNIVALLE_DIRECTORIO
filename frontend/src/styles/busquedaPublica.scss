@@ -61,7 +61,7 @@ $footer-background: linear-gradient(135deg, #b0b0b0, #e0e0e0); /* Degradado para
   .tabla-resultados {
     width: 100%;
     max-width: 1200px;
-    margin: 2rem auto;
+    margin: 0.2rem auto;
     overflow-x: auto;
   }
 
@@ -159,16 +159,54 @@ $footer-background: linear-gradient(135deg, #b0b0b0, #e0e0e0); /* Degradado para
       margin-right: 4px;
     }
   }
+
+  .filtros-avanzados-container {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .filtros-avanzados-titulo {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: $primary-color;
+    margin-top: 2rem;
+    margin-bottom: 0.3rem;
+    text-align: center;
+  }
+  .filtros-avanzados-container {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.2rem; /* menos espacio arriba */
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    max-width: 460px;  /* menos ancho */
+    padding: 0.5rem 0.75rem; /* menos padding */
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    justify-content: center; /* centrar contenido */
+  }
+
 }
 
 /* ✅ Estilos globales para el DataGrid */
 .mi-data-grid {
   border: 0;
-  --DataGrid-containerBackground: linear-gradient(to right, #E81C25, #bb504e) !important;
-
+  --DataGrid-containerBackground: linear-gradient(135deg, #b0b0b0, #e0e0e0) !important;
+  
   .MuiDataGrid-columnHeaders {
     background-color: #E81C25;
-    color: #ffffff;
+    color: #4d4c4c;
   }
 
   .MuiDataGrid-columnHeaderTitle {
@@ -198,6 +236,38 @@ $footer-background: linear-gradient(135deg, #b0b0b0, #e0e0e0); /* Degradado para
         background-color: #ec9a9a !important;
         border-radius: 4px;
       }
+    }
+  }
+
+  // ✅ Estilo para la toolbar personalizada (CustomToolbar)
+  .mi-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    background-image: linear-gradient(to right, #C20E1A, #E53935);
+    color: #fff;
+
+    .mi-toolbar-botones {
+      display: flex;
+      gap: 8px;
+    }
+
+    .MuiButtonBase-root,
+    .MuiSvgIcon-root {
+      color: #ffffff !important;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: #ec9a9a !important;
+        border-radius: 4px;
+      }
+    }
+
+    .MuiInputBase-root {
+      background-color: #ffffff;
+      border-radius: 4px;
+      padding-left: 4px;
     }
   }
 

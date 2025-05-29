@@ -25,7 +25,7 @@ def buscar_personas(query_param, filtro_cargo=None, filtro_correo=None, filtro_d
 
     # Personas por correo institucional
     personas_por_correo = Persona.objects.filter(
-        contactos__tipo_contacto__nombre__iexact='Correo Institucional',
+        contactos__tipo_contacto__nombre__iexact='correo_institucional',
         contactos__valor__icontains=query_param
     )
 

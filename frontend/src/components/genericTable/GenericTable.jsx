@@ -8,7 +8,7 @@ import FormDrawer from '../formModal/FormDrawer';          // Drawer lateral par
 import ColorButtons from '../button/CreateButton';          // Botón "Crear"
 import EditIconButton from '../button/EditIconButton';      // Botón "Editar"
 import DeleteIconButton from '../button/DeleteIconButton';  // Botón "Eliminar"
-import localeTextES from '../../utils/localeTextES';        // Traducciones
+import { esES } from '@mui/x-data-grid/locales'; // Traducciones
 
 import DeleteConfirmationModal from './DeleteConfirmationModal';
 import { formatDate } from '../../utils/formatDate';
@@ -156,7 +156,7 @@ const GenericTable = ({ type }) => {
           columns={columns}
           checkboxSelection
           disableRowSelectionOnClick
-          localeText={localeTextES}    //idioma español  
+          localeText={esES.components.MuiDataGrid.defaultProps.localeText}    //idioma español  
           paginationModel={paginationModel}
           onPaginationModelChange={(newModel) => setPaginationModel(newModel)}
           pageSizeOptions={[5, 10, 15, 20, 50]} // aquí puedes personalizar los valores

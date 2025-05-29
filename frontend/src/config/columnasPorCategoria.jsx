@@ -1,4 +1,3 @@
-import EmailIcon from '../assets/email.svg'
 import LocationCityIcon from '@mui/icons-material/LocationCity'; // Importa el ícono
 import ApartmentIcon from '@mui/icons-material/Apartment'; // Importa el ícono
 import CorporateFareIcon from '@mui/icons-material/CorporateFare';
@@ -125,7 +124,7 @@ export const columnasPorCategoria = {
         const texto = `${dependencia.nombre}`;
         return (
           <Tooltip title={texto} placement="top">
-            <div style={{ whiteSpace: 'normal', wordBreak: 'break-word' }} title={dependencia?.nombre || ''}>
+            <div style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
               {dependencia?.nombre || ''}
             </div>
           </Tooltip>          
