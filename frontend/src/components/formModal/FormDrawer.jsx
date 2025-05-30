@@ -176,7 +176,7 @@ const FormModal = ({ open, onClose, initialData = null, onSubmit, fields = [] })
       }
     }
 
-    return <TextField {...commonProps} key={name} />;
+    return <TextField {...commonProps} type={type} inputProps={field.inputProps || {}}key={name} />;
   };
 
   const style = {

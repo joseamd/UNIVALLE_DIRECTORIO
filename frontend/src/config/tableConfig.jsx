@@ -145,29 +145,66 @@ export const tableConfigs = {
   ubicacion: {
     title: 'Gestión de Ubicacion',
     columns: [
-      { field: 'edificio', headerName: 'Edificio' },
-      { field: 'piso', headerName: 'Piso' },
+      { field: 'edificio_codigo', headerName: 'Código Edificio' },
+      { field: 'edificio_nombre', headerName: 'Nombre Edificio' },
+      { field: 'sede', headerName: 'Sede'},
+      { field: 'num_piso', headerName: 'Número de Pisos' },
       { field: 'latitud', headerName: 'Latitud' },
       { field: 'longitud', headerName: 'Longitud' },
     ],
     fields: [
+      { name: 'edificio_codigo', label: 'Código Edificio', required: true },
+      { name: 'edificio_nombre', label: 'Nombre Edificio', required: true },
       {
-        name: 'edificio',
-        label: 'Edificio',
+        name: 'sede',
+        label: 'Sede',
         type: 'select',
         required: true,
         options: [],
         fetchOptions: async () => {
-          const tipos = await getEdificios(); // Obtenemos los datos
+          const tipos = await getSedes(); // Obtenemos los datos
           return tipos.data.map((t) => ({
             value: t.id,
-            label: `${t.nombre}`,
+            label: `${t.id}. ${t.nombre}`,
           }));
         },
       },
-      { name: 'piso', label: 'Piso', required: true },
-      { name: 'latitud', label: 'Latitud', required: true },
-      { name: 'longitud', label: 'Longitud', required: true },
+      { 
+        name: 'num_piso', 
+        label: 'Piso', 
+        type: 'number', 
+        required: true,
+        inputProps: { 
+          min: 1, 
+          max: 10, 
+          pattern: '[0-9]*', 
+          inputMode: 'numeric' 
+        } 
+      },
+      { 
+        name: 'latitud', 
+        label: 'Latitud', 
+        type: 'number',
+        required: true ,
+        inputProps: {
+          step: 'any',            //permite decimales
+          inputMode: 'decimal',   //muestra teclado decimal en móviles
+          min: -90,
+          max: 90
+        }
+      },
+      { 
+        name: 'longitud', 
+        label: 'Longitud', 
+        type: 'number',
+        required: true,
+        inputProps: {
+          step: 'any',
+          inputMode: 'decimal',
+          min: -180,
+          max: 180
+        }
+      },
     ],
     getData: getUbicaciones,
     createRow: createUbicacion,
@@ -328,7 +365,7 @@ export const tableConfigs = {
           const tipos = await getTipoDocumentos(); // Obtenemos los datos
           return tipos.data.map((t) => ({
             value: t.id,
-            label: `${t.nombre}`,
+            label: `${t.id}. ${t.nombre}`,
           }));
         },
       },
