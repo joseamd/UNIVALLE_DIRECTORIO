@@ -93,11 +93,25 @@ const FormModal = ({ open, onClose, initialData = null, onSubmit, fields = [] })
   };
 
   // Función para enviar el formulario
+
   const handleSubmit = () => {
     if (!validate()) return;
-    onSubmit(formData);     // Ejecuta la función enviada como prop
-    onClose();              // Cierra el Modal
-  };
+
+    // Crear copia para no mutar directamente formData
+    const dataToSend = { ...formData };
+
+    fields.forEach(field => {
+      if (field.type === 'autocomplete') {
+        const val = dataToSend[field.name];
+        // Si el valor es un objeto { value, label }, tomar solo el id (value)
+        if (val && typeof val === 'object' && 'value' in val) {
+          dataToSend[field.name] = val.value;
+        }
+      }
+    });
+    onSubmit(dataToSend);    // Ejecuta la función enviada como prop
+    onClose();               // Cierra el Modal
+  };  
 
   // Función que genera el componente de cada campo según el tipo
   const renderField = (field) => {
@@ -157,24 +171,39 @@ const FormModal = ({ open, onClose, initialData = null, onSubmit, fields = [] })
 
     // Campo tipo autocomplete
     if (type === 'autocomplete') {
-      // Si estamos en modo edición (cuando "persona" ya tiene un valor)
-      if (formData[name]) {
-        return (
-          <TextField
-            {...commonProps}
-            key={name}
-            disabled // Deshabilita el campo si estamos editando
-          />
-        );
-      } else {
-        return (
-          <AutocompleteWithPagination
-            key={name}
-            fetchOptions={field.fetchOptions} // Pasa la función fetchOptions definida en fields
-          />
-        );
-      }
+      return (
+        <AutocompleteWithPagination
+          key={name}
+          fetchOptions={field.fetchOptions}
+          onSelect={(selectedOption) => {
+            setFormData(prev => ({ ...prev, [name]: selectedOption }));
+          }}
+          value={formData[name] || null}
+        />
+      );
     }
+    // if (type === 'autocomplete') {
+    //   // Si estamos en modo edición (cuando "persona" ya tiene un valor)
+    //   if (formData[name]) {
+    //     return (
+    //       <TextField
+    //         {...commonProps}
+    //         key={name}
+    //       />
+    //     );
+    //   } else {
+    //     return (
+    //       <AutocompleteWithPagination
+    //         key={name}
+    //         fetchOptions={field.fetchOptions}   // Pasa la función fetchOptions definida en fields
+    //         onSelect={(selectedOption) => {
+    //           setFormData(prev => ({ ...prev, [name]: selectedOption }));
+    //         }}
+    //         value={formData[name] || null}
+    //       />
+    //     );
+    //   }
+    // }
 
     return <TextField {...commonProps} type={type} inputProps={field.inputProps || {}}key={name} />;
   };
