@@ -39,6 +39,12 @@ const BusquedaPublicaTabs = () => {
     setOpenSnackbar(false);
   };
 
+  // Resetea filtros solo cuando se cambia de categorias y retorne el resultado
+  useEffect(() => {
+    setCargoSeleccionado(null);
+    setDependenciaSeleccionada(null);
+  }, [categoria]);
+
   // Busqueda principal: Solo hacer la búsqueda si el query tiene al menos 3 caracteres
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -67,7 +73,7 @@ const BusquedaPublicaTabs = () => {
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [query, valorFiltro, columnaFiltro]);
+  }, [query, valorFiltro, columnaFiltro, categoria]);
 
 
   //Carga los Cargos desde el backend
@@ -152,7 +158,7 @@ const BusquedaPublicaTabs = () => {
             {categorias.map(cat => (
               <Tab
                 key={cat}
-                label={cat.charAt(0).toUpperCase() + cat.slice(1)}
+                label={cat.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                 value={cat}
               />
             ))}
