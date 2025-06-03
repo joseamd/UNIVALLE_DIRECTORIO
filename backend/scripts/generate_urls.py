@@ -14,7 +14,7 @@ def load_custom_routes():
         return json.load(f)
 
 def parse_models():
-    model_pattern = re.compile(r'^class (\w+)\(models\.Model\):')
+    model_pattern = re.compile(r'^\s*class\s+(\w+)\s*\((.*?)\):')
     models = []
 
     with open(MODELS_FILE, 'r', encoding='utf-8') as f:
@@ -41,7 +41,7 @@ def generate_urls_py(models, custom_routes):
     urlpatterns = [
         "",
         "urlpatterns = [",
-        "    path('', include(router.urls)),",
+        "    path('admin/', include(router.urls)),",
         "    # Nueva ruta para búsqueda pública de funcionarios",
         "]",
         ""

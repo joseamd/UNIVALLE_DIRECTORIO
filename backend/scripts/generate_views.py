@@ -8,7 +8,7 @@ serializers_path = base_dir / 'directorio_univalle' / 'directorio' / 'serializer
 views_path = base_dir / 'directorio_univalle' / 'directorio' / 'views.py'
 
 # Regex
-model_regex = re.compile(r'^class (\w+)\(models.Model\):')
+model_regex = re.compile(r'^\s*class\s+(\w+)\s*\((.*?)\):')
 serializer_regex = re.compile(r'^class (\w+Serializer)\(serializers\.ModelSerializer\):')
 
 def parse_models():
