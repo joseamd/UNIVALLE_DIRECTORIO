@@ -1,56 +1,69 @@
-import re
+import json
 from pathlib import Path
 
-# Paths
-#base_dir = Path(__file__).resolve().parents[2]
-#models_path = base_dir / 'directorio_univalle' / 'directorio' / 'models.py'
-#router_path = base_dir / 'frontend' / 'src' / 'router' / 'AppRouter.jsx'  # Ajusta esta ruta si es necesario
+# Rutas base
 BASE_DIR = Path(__file__).resolve().parent.parent
+CUSTOM_ROUTES_FILE = BASE_DIR / 'scripts' / 'custom_routes.json'
+ROUTER_FILE = BASE_DIR.parent / 'frontend' / 'src' / 'router' / 'AppRouter.jsx'
 
-# Archivos fuente y destino
-models_path = BASE_DIR / 'directorio_univalle' / 'directorio' / 'models.py'
-router_path = BASE_DIR.parent / 'frontend' / 'src' / 'router' / 'AppRouter.jsx'
+# Cargar rutas personalizadas
+with open(CUSTOM_ROUTES_FILE, 'r', encoding='utf-8') as f:
+    custom_routes = json.load(f)
 
-# Regex
-model_regex = re.compile(r'^class (\w+)\(models.Model\):')
+def generate_router_jsx(routes):
+    header = """import React, { useContext } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Layout from '../components/Layout';
+import Home from '../pages/home/Home';
+import Login from '../pages/Login/Login';
+import List from '../pages/list/List';
+import Single from '../pages/single/Single';
+import New from '../pages/new/New';
+import BusquedaPublicaPage from '../pages/public/BusquedaPublicaPage';
+import BusquedaGlobal from '../components/admin/BusquedaGlobal';
 
-def parse_models():
-    models = []
-    with open(models_path, 'r', encoding='utf-8') as file:
-        for line in file:
-            match = model_regex.match(line.strip())
-            if match:
-                models.append(match.group(1))
-    return models
+import "../styles/genericTable.scss";
+import '../styles/dark.scss';
+import { DarkModeContext } from '../context/darkModeContext';
 
-def generate_react_router(models):
-    with open(router_path, 'w', encoding='utf-8') as f:
-        # Encabezado
-        f.write("import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';\n")
-        for model in models:
-            f.write(f"import {model}Page from './pages/{model}Page';\n")
-        f.write("\n")
-        f.write("export default function AppRouter() {\n")
-        f.write("  return (\n")
-        f.write("    <Router>\n")
-        f.write("      <Routes>\n")
+const AppRouter = () => {
 
-        # Rutas
-        for model in models:
-            url_path = model.lower()
-            f.write(f"        <Route path='/{url_path}' element={{<{model}Page />}} />\n")
+  const {darkMode} = useContext(DarkModeContext)
 
-        # Cierre
-        f.write("      </Routes>\n")
-        f.write("    </Router>\n")
-        f.write("  );\n")
-        f.write("}\n")
+  return (
+    <div className={darkMode ? "app dark" : "app"}>
+       <BrowserRouter>
+        <Routes>
+          {/* Rutas principales con Layout */}
+          <Route path="directorio/admin" element={<Layout />}>
+"""
 
-# Ejecutar
-if __name__ == '__main__':
-    models = parse_models()
-    if models:
-        generate_react_router(models)
-        print(f"✅ AppRouter.jsx generado con {len(models)} rutas.")
-    else:
-        print("❌ No se encontraron modelos en models.py.")
+    body = ""
+    for model in routes.keys():
+        route_name = model.lower()  # singular y en minúsculas
+        model_id = f"{route_name}Id"
+        body += f"""            {{/* Ruta para {model} */}}
+            <Route path="{route_name}">
+              <Route index element={{<List endpoint="{route_name}" />}} />
+              <Route path=":{model_id}" element={{<Single endpoint="{route_name}" />}} />
+              <Route path="new" element={{<New endpoint="{route_name}" />}} />
+            </Route>\n\n"""
+
+    footer = """          </Route>
+          <Route path="directorio/publica/buscar" element={<BusquedaPublicaPage />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
+};
+
+export default AppRouter;
+"""
+    return header + body + footer
+
+# Guardar archivo JSX
+jsx_code = generate_router_jsx(custom_routes)
+with open(ROUTER_FILE, 'w', encoding='utf-8') as f:
+    f.write(jsx_code)
+
+print("✅ AppRouter.jsx generado correctamente como el original (singular, minúscula).")

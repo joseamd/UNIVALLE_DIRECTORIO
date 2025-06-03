@@ -30,7 +30,7 @@ const AppRouter = () => {
               <Route path="new" element={<New endpoint="sede" />} />
             </Route>
 
-            {/* Ruta para Edificios */}
+            {/* Ruta para Espacios */}
             <Route path="espacio">
               <Route index element={<List endpoint="Espacio" />} />
               <Route path=":EspacioId" element={<Single endpoint="Espacio" />} />

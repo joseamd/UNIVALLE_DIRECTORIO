@@ -1,6 +1,5 @@
 {
     "Sede": "sedes",
-    "Edificio": "edificios",
     "Ubicacion": "ubicaciones",
     "TipoDependencia": "tipo-dependencias",
     "Dependencia": "dependencias",
@@ -11,5 +10,6 @@
     "ContactoDependencia": "contactos-dependencia",
     "TipoVinculacion": "tipo-vinculaciones",
     "Cargo": "cargos",
-    "Vinculacion": "vinculaciones"
+    "Vinculacion": "vinculaciones",
+    "Espacio": "espacios"
 }
