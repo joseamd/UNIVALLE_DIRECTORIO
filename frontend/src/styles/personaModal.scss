@@ -1,0 +1,54 @@
+.persona-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  max-width: 90vw;
+  background-color: white; /* equivale a background.paper */
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  outline: none; /* para evitar borde azul de enfoque en modal */
+}
+
+.persona-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(to right, #C20E1A, #E53935);
+  color: #fff;
+  padding: 12px 24px; /* py=1.5 = 12px, px=3 = 24px */
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  box-sizing: border-box;
+}
+
+.persona-modal__title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.25rem; /* equivalente a h6 */
+  color: #fff;
+}
+
+.persona-modal__close-button {
+  color: #fff;
+}
+
+.persona-modal__content {
+  padding: 24px;
+  color: #333;
+}
+
+.persona-modal__label {
+  font-weight: bold;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+.persona-modal__value {
+  margin-bottom: 12px;
+}
+
+.persona-modal__divider {
+  margin: 0;
+}

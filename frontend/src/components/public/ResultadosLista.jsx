@@ -9,12 +9,25 @@ import {
 
 import { columnasPorCategoria } from '../../config/columnasPorCategoria';
 import SinResultados from './SinResultados';
+import PersonaModal from './modales/PersonaModal';
 import '../../styles/BusquedaPublica.scss';
 
 
 const ResultadosLista = ({ datos, categoria, busqueda  }) => {
   //console.log('Datos recibidos para mostrar:', datos);
   const [paginationModel, setPaginationModel] = useState({pageSize: 10, page: 0, });
+
+  const [personaSeleccionada, setPersonaSeleccionada] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleOpenModal = (persona) => {
+    setPersonaSeleccionada(persona);
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
 
   // Si no hay búsqueda (menos de 3 caracteres), no mostramos nada
   if (!busqueda || busqueda.length < 3) return null;
@@ -30,7 +43,7 @@ const ResultadosLista = ({ datos, categoria, busqueda  }) => {
     );
   }
 
-  const columnas = columnasPorCategoria[categoria] || [];
+  const columnas = columnasPorCategoria(handleOpenModal)[categoria] || [];
   
   // Toolbar personalizada con filtros, columnas, densidad y filtro rápido
   function CustomToolbar() {
@@ -56,6 +69,11 @@ const ResultadosLista = ({ datos, categoria, busqueda  }) => {
         onPaginationModelChange={(newModel) => setPaginationModel(newModel)}
         pageSizeOptions={[5, 10]}
         slots={{ toolbar: CustomToolbar }}        
+      />
+      <PersonaModal
+        open={openModal}
+        onClose={handleCloseModal}
+        persona={personaSeleccionada}
       />      
     </div>
   );

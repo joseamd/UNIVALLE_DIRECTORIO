@@ -3,7 +3,7 @@ import ApartmentIcon from '@mui/icons-material/Apartment'; // Importa el ícono
 import CorporateFareIcon from '@mui/icons-material/CorporateFare';
 import { Tooltip } from '@mui/material';
 
-export const columnasPorCategoria = {
+export const columnasPorCategoria = (handleOpenModal) => ({
 
   //Genera tabla de Personas
   personas: [
@@ -26,7 +26,10 @@ export const columnasPorCategoria = {
         const color = `hsl(${Math.abs(hashCode(nombre)) % 360}, 80%, 40%)`;
 
         return (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div 
+            onClick={() => handleOpenModal(params.row)}
+            style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}
+          >
             <span
               style={{
                 width: '30px',
@@ -62,6 +65,8 @@ export const columnasPorCategoria = {
       field: 'cargo',
       headerName: 'Cargo',
       flex: 1,
+      minWidth: 120,
+      maxWidth: 150,
       renderCell: (params) => {
         const texto = params.value?.toLowerCase() || '';
         const capitalizado = texto.replace(/\b\w/g, char => char.toUpperCase());
@@ -77,8 +82,6 @@ export const columnasPorCategoria = {
       field: 'correo_institucional',
       headerName: 'Correo Institucional',
       flex: 1,
-      minWidth: 120,
-      maxWidth: 150,
       renderCell: (params) => {
         const contacto = params.row.contactos_persona?.find(
           (c) => c.tipo.toLowerCase().includes('correo_institucional')
@@ -87,15 +90,18 @@ export const columnasPorCategoria = {
 
         return correo ? (
           <Tooltip title={correo} placement="top">
-            <div
+            <a
+              href={`mailto:${correo}`}
               style={{
                 whiteSpace: 'normal',
                 wordBreak: 'break-word',
                 cursor: 'pointer',
+                color: '#1976d2',
+                textDecoration: 'underline',
               }}
             >
               {correo}
-            </div>
+            </a>
           </Tooltip>
         ) : '';
       },
@@ -104,6 +110,8 @@ export const columnasPorCategoria = {
       field: 'telefono',
       headerName: 'Teléfono',
       flex: 1,
+      minWidth: 120,
+      maxWidth: 150,
       renderCell: (params) => {
         const contacto = params.row.contactos_persona?.find(
           (c) => c.tipo.toLowerCase().includes('telefono')
@@ -131,42 +139,42 @@ export const columnasPorCategoria = {
         );
       },
     },
-    {
-      field: 'ubicacion',
-      headerName: 'Ubicacion',
-      flex: 1,
-      renderCell: (params) => {
-        const ubicacion = params.row.ubicacion;
-        if (!ubicacion || !ubicacion.codigo || !ubicacion.nombre) return '';
+    // {
+    //   field: 'ubicacion',
+    //   headerName: 'Ubicacion',
+    //   flex: 1,
+    //   renderCell: (params) => {
+    //     const ubicacion = params.row.ubicacion;
+    //     if (!ubicacion || !ubicacion.codigo || !ubicacion.nombre) return '';
 
-        const texto = `${ubicacion.codigo} - ${ubicacion.nombre}`;
-        return (
-          <Tooltip title={texto} placement="top">
-              <div style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
-                <strong>{ubicacion.codigo}</strong> - {ubicacion.nombre}
-              </div>
-          </Tooltip>          
-        );
-      },
-    },
-    {
-      field: 'sede',
-      headerName: 'Sede',
-      flex: 1,
-      renderCell: (params) => {
-        const sede = params.row.ubicacion?.sede;
-        if (!sede) return '';
+    //     const texto = `${ubicacion.codigo} - ${ubicacion.nombre}`;
+    //     return (
+    //       <Tooltip title={texto} placement="top">
+    //           <div style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
+    //             <strong>{ubicacion.codigo}</strong> - {ubicacion.nombre}
+    //           </div>
+    //       </Tooltip>          
+    //     );
+    //   },
+    // },
+    // {
+    //   field: 'sede',
+    //   headerName: 'Sede',
+    //   flex: 1,
+    //   renderCell: (params) => {
+    //     const sede = params.row.ubicacion?.sede;
+    //     if (!sede) return '';
 
-        const texto = `${sede.nombre} - ${sede.direccion}, ${sede.ciudad}`;
-        return (
-          <Tooltip title={texto} placement="top">
-            <div style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
-              <strong>{sede.nombre}</strong> - {sede.direccion}, {sede.ciudad}
-            </div>
-          </Tooltip>
-        );
-      },
-    }
+    //     const texto = `${sede.nombre} - ${sede.direccion}, ${sede.ciudad}`;
+    //     return (
+    //       <Tooltip title={texto} placement="top">
+    //         <div style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
+    //           <strong>{sede.nombre}</strong> - {sede.direccion}, {sede.ciudad}
+    //         </div>
+    //       </Tooltip>
+    //     );
+    //   },
+    // }
   ],
  
   //Genera tabla de Dependencias
@@ -228,15 +236,18 @@ export const columnasPorCategoria = {
 
         return correo ? (
           <Tooltip title={correo} placement="top">
-            <div
+            <a
+              href={`mailto:${correo}`}
               style={{
                 whiteSpace: 'normal',
                 wordBreak: 'break-word',
                 cursor: 'pointer',
+                color: '#1976d2',
+                textDecoration: 'underline',
               }}
             >
               {correo}
-            </div>
+            </a>
           </Tooltip>
         ) : '';
       },
@@ -417,4 +428,4 @@ export const columnasPorCategoria = {
     { field: 'ciudad', headerName: 'Ciudad', flex: 1 },
     { field: 'direccion', headerName: 'Dirección', flex: 1 },
   ],
-};
+});
