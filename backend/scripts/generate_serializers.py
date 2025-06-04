@@ -7,7 +7,7 @@ models_path = base_dir / 'directorio_univalle' / 'directorio' / 'models.py'
 serializers_path = base_dir / 'directorio_univalle' / 'directorio' / 'serializers.py'
 
 # Regex para encontrar clases de modelo
-model_regex = re.compile(r'^class (\w+)\(models.Model\):')
+model_regex = re.compile(r'^\s*class\s+(\w+)\s*\((.*?)\):')
 
 # Leer modelos desde models.py
 def parse_models():

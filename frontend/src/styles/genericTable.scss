@@ -43,7 +43,7 @@
 
 .custom-data-grid {
   border: 0;
-  --DataGrid-containerBackground: #e2e2e2 !important;
+  --DataGrid-containerBackground: linear-gradient(135deg, #b0b0b0, #e0e0e0) !important;
 
   .MuiDataGrid-columnHeaders {
     background-color: #E81C25;

@@ -22,7 +22,7 @@ const AppRouter = () => {
        <BrowserRouter>
         <Routes>
           {/* Rutas principales con Layout */}
-          <Route path="/" element={<Layout />}>
+          <Route path="directorio/admin" element={<Layout />}>
             {/* Ruta para Sedes */}
             <Route path="sede">
               <Route index element={<List endpoint="sede" />} />
@@ -30,11 +30,11 @@ const AppRouter = () => {
               <Route path="new" element={<New endpoint="sede" />} />
             </Route>
 
-            {/* Ruta para Edificios */}
-            <Route path="edificio">
-              <Route index element={<List endpoint="edificio" />} />
-              <Route path=":edificioId" element={<Single endpoint="edificio" />} />
-              <Route path="new" element={<New endpoint="edificio" />} />
+            {/* Ruta para Espacios */}
+            <Route path="espacio">
+              <Route index element={<List endpoint="Espacio" />} />
+              <Route path=":EspacioId" element={<Single endpoint="Espacio" />} />
+              <Route path="new" element={<New endpoint="Espacio" />} />
             </Route>
 
             {/* Ruta para Ubicaciones */}
@@ -117,7 +117,7 @@ const AppRouter = () => {
             {/* Rutas adicionales si es necesario */}
             {/* Agrega aquí el resto de las tablas si es necesario */}
           </Route>
-          <Route path="/publica/busqueda" element={<BusquedaPublicaPage />} />
+          <Route path="directorio/publica/buscar" element={<BusquedaPublicaPage />} />
         </Routes>
       </BrowserRouter>
     </div>

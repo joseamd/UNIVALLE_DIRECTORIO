@@ -8,11 +8,11 @@ import {
 } from '../services/sede';
 
 import {
-  getEdificios,
-  createEdificio,
-  updateEdificio,
-  deleteEdificio
-} from '../services/edificio';
+  getEspacios,
+  createEspacio,
+  updateEspacio,
+  deleteEspacio
+} from '../services/espacio';
 
 import {
   getUbicaciones,
@@ -112,8 +112,9 @@ export const tableConfigs = {
     updateRow: updateSede,
     deleteRow: deleteSede,
   },
-  edificio: {
-    title: 'Gestión de Edificio',
+
+  espacio: {
+    title: 'Gestión de Espacio',
     columns: [
       { field: 'sede', headerName: 'Sede' },
       { field: 'codigo', headerName: 'Codigo' },
@@ -137,43 +138,82 @@ export const tableConfigs = {
       { name: 'codigo', label: 'Codigo', required: true },
       { name: 'nombre', label: 'Nombre', required: true },
     ],
-    getData: getEdificios,
-    createRow: createEdificio,
-    updateRow: updateEdificio,
-    deleteRow: deleteEdificio,
+    getData: getEspacios,
+    createRow: createEspacio,
+    updateRow: updateEspacio,
+    deleteRow: deleteEspacio,
   },
+
   ubicacion: {
     title: 'Gestión de Ubicacion',
     columns: [
-      { field: 'edificio', headerName: 'Edificio' },
-      { field: 'piso', headerName: 'Piso' },
+      { field: 'edificio_codigo', headerName: 'Código Edificio' },
+      { field: 'edificio_nombre', headerName: 'Nombre Edificio' },
+      { field: 'sede', headerName: 'Sede'},
+      { field: 'num_piso', headerName: 'Número de Pisos' },
       { field: 'latitud', headerName: 'Latitud' },
       { field: 'longitud', headerName: 'Longitud' },
     ],
     fields: [
+      { name: 'edificio_codigo', label: 'Código Edificio', required: true },
+      { name: 'edificio_nombre', label: 'Nombre Edificio', required: true },
       {
-        name: 'edificio',
-        label: 'Edificio',
+        name: 'sede',
+        label: 'Sede',
         type: 'select',
         required: true,
         options: [],
         fetchOptions: async () => {
-          const tipos = await getEdificios(); // Obtenemos los datos
+          const tipos = await getSedes(); // Obtenemos los datos
           return tipos.data.map((t) => ({
             value: t.id,
-            label: `${t.nombre}`,
+            label: `${t.id}. ${t.nombre}`,
           }));
         },
       },
-      { name: 'piso', label: 'Piso', required: true },
-      { name: 'latitud', label: 'Latitud', required: true },
-      { name: 'longitud', label: 'Longitud', required: true },
+      { 
+        name: 'num_piso', 
+        label: 'Piso', 
+        type: 'number', 
+        required: true,
+        inputProps: { 
+          min: 1, 
+          max: 10, 
+          pattern: '[0-9]*', 
+          inputMode: 'numeric' 
+        } 
+      },
+      { 
+        name: 'latitud', 
+        label: 'Latitud', 
+        type: 'number',
+        required: true ,
+        inputProps: {
+          step: 'any',            //permite decimales
+          inputMode: 'decimal',   //muestra teclado decimal en móviles
+          min: -90,
+          max: 90
+        }
+      },
+      { 
+        name: 'longitud', 
+        label: 'Longitud', 
+        type: 'number',
+        required: true,
+        inputProps: {
+          step: 'any',
+          inputMode: 'decimal',
+          min: -180,
+          max: 180
+        }
+      },
     ],
     getData: getUbicaciones,
     createRow: createUbicacion,
     updateRow: updateUbicacion,
     deleteRow: deleteUbicacion,
   },
+
   tipodependencia: {
     title: 'Gestión de TipoDependencia',
     columns: [
@@ -204,6 +244,7 @@ export const tableConfigs = {
     updateRow: updateTipoDocumento,
     deleteRow: deleteTipoDocumento,
   },
+  
   tipocontacto: {
     title: 'Gestión de TipoContacto',
     columns: [
@@ -219,6 +260,7 @@ export const tableConfigs = {
     updateRow: updateTipoContacto,
     deleteRow: deleteTipoContacto,
   },
+
   tipovinculacion: {
     title: 'Gestión de TipoVinculacion',
     columns: [
@@ -234,6 +276,7 @@ export const tableConfigs = {
     updateRow: updateTipoVinculacion,
     deleteRow: deleteTipoVinculacion,
   },
+
   cargo: {
     title: 'Gestión de Cargo',
     columns: [
@@ -249,6 +292,7 @@ export const tableConfigs = {
     updateRow: updateCargo,
     deleteRow: deleteCargo,
   },
+
   dependencia: {
     title: 'Gestión de Dependencia',
     columns: [
@@ -307,6 +351,7 @@ export const tableConfigs = {
     updateRow: updateDependencia,
     deleteRow: deleteDependencia,
   },
+
   persona: {
     title: 'Gestión de Persona',
     columns: [
@@ -343,6 +388,7 @@ export const tableConfigs = {
     updateRow: updatePersona,
     deleteRow: deletePersona,
   },
+
   contactopersona: {
     title: 'Gestión de ContactoPersona',
     columns: [
@@ -397,6 +443,7 @@ export const tableConfigs = {
     updateRow: updateContactoPersona,
     deleteRow: deleteContactoPersona,
   },
+
   contactodependencia: {
     title: 'Gestión de ContactoDependencia',
     columns: [
@@ -442,6 +489,7 @@ export const tableConfigs = {
     updateRow: updateContactoDependencia,
     deleteRow: deleteContactoDependencia,
   },
+
   vinculacion: {
     title: 'Gestión de Vinculacion',
     columns: [
@@ -458,88 +506,88 @@ export const tableConfigs = {
     },
   ],
     fields: [
-   {
-      name: 'persona',
-      label: 'Persona',
-      type: 'autocomplete',
-      required: true,
-      readOnlyOnEdit: true,
-      options: [],
-      fetchOptions: async ({ searchTerm, page = 1 }) => {
-        if (searchTerm && searchTerm.length >= 3) {
+      {
+        name: 'persona',
+        label: 'Persona',
+        type: 'autocomplete',
+        required: true,
+        readOnlyOnEdit: true,
+        options: [],
+        fetchOptions: async ({ searchTerm, page = 1 }) => {
+          if (searchTerm && searchTerm.length >= 3) {
+            try {
+              const res = await getPersonas({ searchTerm, page });
+              return res.data.map((p) => ({
+                value: p.id,
+                label: `${p.primer_nombre} ${p.segundo_nombre || ''} ${p.primer_apellido} ${p.segundo_apellido || ''}`.trim(),
+              }));
+            } catch (error) {
+              console.error('Error al cargar las personas:', error);
+              return [];
+            }
+          }
+          return [];
+        },
+        normalizeValue: async (value) => {
+          if (!value) return '';
           try {
-            const res = await getPersonas({ searchTerm, page });
-            return res.data.map((p) => ({
+            const res = await getPersonas(value);
+            const p = res.data;
+            return {
               value: p.id,
               label: `${p.primer_nombre} ${p.segundo_nombre || ''} ${p.primer_apellido} ${p.segundo_apellido || ''}`.trim(),
-            }));
+            };
           } catch (error) {
-            console.error('Error al cargar las personas:', error);
-            return [];
+            console.error('Error al obtener persona:', error);
+            return { value, label: `ID: ${value}` };
           }
         }
-        return [];
       },
-      normalizeValue: async (value) => {
-        if (!value) return '';
-        try {
-          const res = await getPersona(value);
-          const p = res.data;
-          return {
-            value: p.id,
-            label: `${p.primer_nombre} ${p.segundo_nombre || ''} ${p.primer_apellido} ${p.segundo_apellido || ''}`.trim(),
-          };
-        } catch (error) {
-          console.error('Error al obtener persona:', error);
-          return { value, label: value };
-        }
-      }
-    },
-    {
-      name: 'tipo_vinculacion',
-      label: 'Tipo Vinculacion',
-      type: 'select',
-      required: true,
-      options: [],
-      fetchOptions: async () => {
-        const tipos = await getTipoVinculaciones(); // Obtenemos los datos
-        return tipos.data.map((t) => ({
-          value: t.id,
-          label: `${t.nombre}`,
-        }));
+      {
+        name: 'tipo_vinculacion',
+        label: 'Tipo Vinculacion',
+        type: 'select',
+        required: true,
+        options: [],
+        fetchOptions: async () => {
+          const tipos = await getTipoVinculaciones(); // Obtenemos los datos
+          return tipos.data.map((t) => ({
+            value: t.id,
+            label: `${t.nombre}`,
+          }));
+        },
       },
-    },
-    { name: 'cargo', label: 'Cargo', type: 'select', required: true, options: [], fetchOptions: getCargos },
-    {
-      name: 'dependencia',
-      label: 'Dependencia',
-      type: 'select',
-      required: true,
-      options: [],
-      fetchOptions: async () => {
-        const tipos = await getDependencias(); // Obtenemos los datos
-        return tipos.data.map((t) => ({
-          value: t.id,
-          label: `${t.nombre}`,
-        }));
+      { name: 'cargo', label: 'Cargo', type: 'select', required: true, options: [], fetchOptions: getCargos },
+      {
+        name: 'dependencia',
+        label: 'Dependencia',
+        type: 'select',
+        required: true,
+        options: [],
+        fetchOptions: async () => {
+          const tipos = await getDependencias(); // Obtenemos los datos
+          return tipos.data.map((t) => ({
+            value: t.id,
+            label: `${t.nombre}`,
+          }));
+        },
       },
-    },
-    { name: 'fecha_inicio', label: 'Fecha Inicio', required: true, type: 'date' },
-    { name: 'fecha_fin', label: 'Fecha Fin', required: true, type: 'date' },
-    {
-      name: 'estado_laboral',
-      label: 'Estado Laboral',
-      type: 'select',
-      required: true,
-      options: [
-        { value: 'activo', label: 'Activo' },
-        { value: 'inactivo', label: 'Inactivo' },
-      ],
-    },
-  ],
-    getData: getVinculaciones,
-    createRow: createVinculacion,
-    updateRow: updateVinculacion,
-    deleteRow: deleteVinculacion,
+      { name: 'fecha_inicio', label: 'Fecha Inicio', required: true, type: 'date' },
+      { name: 'fecha_fin', label: 'Fecha Fin', required: true, type: 'date' },
+      {
+        name: 'estado_laboral',
+        label: 'Estado Laboral',
+        type: 'select',
+        required: true,
+        options: [
+          { value: 'activo', label: 'Activo' },
+          { value: 'inactivo', label: 'Inactivo' },
+        ],
+      },
+    ],
+      getData: getVinculaciones,
+      createRow: createVinculacion,
+      updateRow: updateVinculacion,
+      deleteRow: deleteVinculacion,
   },
 };

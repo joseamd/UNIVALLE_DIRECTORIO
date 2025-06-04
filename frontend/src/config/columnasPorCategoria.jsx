@@ -1,8 +1,9 @@
-import EmailIcon from '../assets/email.svg'
 import LocationCityIcon from '@mui/icons-material/LocationCity'; // Importa el ícono
 import ApartmentIcon from '@mui/icons-material/Apartment'; // Importa el ícono
+import CorporateFareIcon from '@mui/icons-material/CorporateFare';
+import { Tooltip } from '@mui/material';
 
-export const columnasPorCategoria = {
+export const columnasPorCategoria = (handleOpenModal) => ({
 
   //Genera tabla de Personas
   personas: [
@@ -25,7 +26,10 @@ export const columnasPorCategoria = {
         const color = `hsl(${Math.abs(hashCode(nombre)) % 360}, 80%, 40%)`;
 
         return (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div 
+            onClick={() => handleOpenModal(params.row)}
+            style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}
+          >
             <span
               style={{
                 width: '30px',
@@ -61,6 +65,8 @@ export const columnasPorCategoria = {
       field: 'cargo',
       headerName: 'Cargo',
       flex: 1,
+      minWidth: 120,
+      maxWidth: 150,
       renderCell: (params) => {
         const texto = params.value?.toLowerCase() || '';
         const capitalizado = texto.replace(/\b\w/g, char => char.toUpperCase());
@@ -76,28 +82,27 @@ export const columnasPorCategoria = {
       field: 'correo_institucional',
       headerName: 'Correo Institucional',
       flex: 1,
-      minWidth: 120, 
-      maxWidth: 150,
       renderCell: (params) => {
         const contacto = params.row.contactos_persona?.find(
-          (c) => c.tipo.toLowerCase().includes('correo institucional')
+          (c) => c.tipo.toLowerCase().includes('correo_institucional')
         );
         const correo = contacto?.valor;
 
         return correo ? (
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: '100%',
-              height: '100%',
-            }}
-          >
-            <a href={`mailto:${correo}`} title={correo}>
-              <img src={EmailIcon} alt="Correo" width="20" />
+          <Tooltip title={correo} placement="top">
+            <a
+              href={`mailto:${correo}`}
+              style={{
+                whiteSpace: 'normal',
+                wordBreak: 'break-word',
+                cursor: 'pointer',
+                color: '#1976d2',
+                textDecoration: 'underline',
+              }}
+            >
+              {correo}
             </a>
-          </div>
+          </Tooltip>
         ) : '';
       },
     },
@@ -105,9 +110,11 @@ export const columnasPorCategoria = {
       field: 'telefono',
       headerName: 'Teléfono',
       flex: 1,
+      minWidth: 120,
+      maxWidth: 150,
       renderCell: (params) => {
         const contacto = params.row.contactos_persona?.find(
-          (c) => c.tipo.toLowerCase().includes('teléfono')
+          (c) => c.tipo.toLowerCase().includes('telefono')
         );
         return contacto
           ? `${contacto.valor}${contacto.extension ? ` Ext. ${contacto.extension}` : ''}`
@@ -120,124 +127,69 @@ export const columnasPorCategoria = {
       flex: 1,
       renderCell: (params) => {
         const dependencia = params.row.dependencia;
+        if (!dependencia) return '';
+
+        const texto = `${dependencia.nombre}`;
         return (
-          <div style={{ whiteSpace: 'normal', wordBreak: 'break-word' }} title={dependencia?.nombre || ''}>
-            {dependencia?.nombre || ''}
-          </div>
+          <Tooltip title={texto} placement="top">
+            <div style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
+              {dependencia?.nombre || ''}
+            </div>
+          </Tooltip>          
         );
       },
     },
-    {
-      field: 'edificio',
-      headerName: 'Edificio',
-      flex: 1,
-      minWidth: 120, 
-      maxWidth: 80,
-      renderCell: (params) => {
-        const edificio = params.row.edificio;
-        return (
-          <div style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
-            {edificio?.codigo || ''}
-          </div>
-        );
-      },
-    },
-    {
-      field: 'sede',
-      headerName: 'Ubicación',
-      flex: 1,
-      renderCell: (params) => {
-        const sede = params.row.sede;
-        return sede ? (
-          <div style={{ whiteSpace: 'normal', wordBreak: 'break-word' }} title={sede.nombre + " - "+ sede.direccion + ", "+sede.ciudad} >
-            <strong>{sede.nombre}</strong> - {sede.direccion}, {sede.ciudad}
-          </div>
-        ) : '';
-      },
-    },
+    // {
+    //   field: 'ubicacion',
+    //   headerName: 'Ubicacion',
+    //   flex: 1,
+    //   renderCell: (params) => {
+    //     const ubicacion = params.row.ubicacion;
+    //     if (!ubicacion || !ubicacion.codigo || !ubicacion.nombre) return '';
+
+    //     const texto = `${ubicacion.codigo} - ${ubicacion.nombre}`;
+    //     return (
+    //       <Tooltip title={texto} placement="top">
+    //           <div style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
+    //             <strong>{ubicacion.codigo}</strong> - {ubicacion.nombre}
+    //           </div>
+    //       </Tooltip>          
+    //     );
+    //   },
+    // },
+    // {
+    //   field: 'sede',
+    //   headerName: 'Sede',
+    //   flex: 1,
+    //   renderCell: (params) => {
+    //     const sede = params.row.ubicacion?.sede;
+    //     if (!sede) return '';
+
+    //     const texto = `${sede.nombre} - ${sede.direccion}, ${sede.ciudad}`;
+    //     return (
+    //       <Tooltip title={texto} placement="top">
+    //         <div style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
+    //           <strong>{sede.nombre}</strong> - {sede.direccion}, {sede.ciudad}
+    //         </div>
+    //       </Tooltip>
+    //     );
+    //   },
+    // }
   ],
  
   //Genera tabla de Dependencias
   dependencias: [
-    { field: 'nombre', headerName: 'Nombre', flex: 1 },
     {
-      field: 'correo_institucional',
-      headerName: 'Correo Institucional',
+      field: 'nombre',
+      headerName: 'Nombre',
       flex: 1,
       renderCell: (params) => {
-        const contacto = params.row.contactos_dependencia?.find(
-          (c) => c.tipo.toLowerCase().includes('correo')
-        );
-        return contacto?.valor || '';
-      },
-    },
-    {
-      field: 'telefono',
-      headerName: 'Teléfono',
-      flex: 1,
-      renderCell: (params) => {
-        const contacto = params.row.contactos_dependencia?.find(
-          (c) => c.tipo.toLowerCase().includes('teléfono')
-        );
-        return contacto
-          ? `${contacto.valor}${contacto.extension ? ` Ext. ${contacto.extension}` : ''}`
-          : '';
-      },
-    },
-    {
-      field: 'sitio',
-      headerName: 'Sitio Web',
-      flex: 1,
-      renderCell: (params) => {
-        const contacto = params.row.contactos_dependencia?.find(
-          (c) => c.tipo.toLowerCase().includes('sitio')
-        );
-        return contacto?.valor ? (
-          <a href={contacto.valor} target="_blank" rel="noopener noreferrer">
-            {contacto.valor}
-          </a>
-        ) : '';
-      },
-    },
-    {
-      field: 'edificio',
-      headerName: 'Edificio',
-      flex: 1,
-      minWidth: 120, 
-      maxWidth: 80,
-      renderCell: (params) => {
-        const edificio = params.row.edificio;
-        return edificio ? `${edificio.codigo}` : '';
-      },
-    },
-    {
-      field: 'sede',
-      headerName: 'Ubicación',
-      flex: 1,
-      renderCell: (params) => {
-        const sede = params.row.sede;
-        return sede ? (
-          <div>
-            <strong>{sede.nombre}</strong> - {sede.direccion}, {sede.ciudad}
-          </div>
-        ) : '';
-      },
-    },
-  ],
+        const nombre = params.row.nombre || '';        
 
-  //Genera tabla de Edificios
-  edificios: [
-    {
-      field: 'codigo',
-      headerName: 'Código',
-      flex: 1,
-      renderCell: (params) => {
-        const codigoEdificio = params.row.codigo || '';
-
-        // Generamos el color aleatorio basado en el código del edificio
+        // Función para generar un color HSL basado en el nombre
         const hashCode = (str) =>
           str.split('').reduce((acc, char) => char.charCodeAt(0) + ((acc << 5) - acc), 0);
-        const color = `hsl(${Math.abs(hashCode(codigoEdificio)) % 360}, 80%, 40%)`;
+        const color = `hsl(${Math.abs(hashCode(nombre)) % 360}, 80%, 40%)`;
 
         return (
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -254,7 +206,147 @@ export const columnasPorCategoria = {
                 color: 'white',
               }}
             >
-              {/* Aquí el ícono de apartamento centrado en el círculo */}
+              {/* Aquí el ícono centrado en el círculo */}
+              <CorporateFareIcon fontSize="small" style={{ color: 'white' }} />
+            </span>
+            <span
+              style={{
+                display: 'table-cell',
+                verticalAlign: 'middle',
+                whiteSpace: 'nowrap',
+                fontSize: 'calc(0.771416em)',
+              }}
+            >
+              {nombre}
+            </span>
+          </div>
+        );
+      }
+    },
+
+    {
+      field: 'correo_institucional',
+      headerName: 'Correo Institucional',
+      flex: 1,
+      renderCell: (params) => {
+        const contacto = params.row.contactos_dependencia?.find(
+          (c) => c.tipo.toLowerCase().includes('correo_institucional')
+        );
+        const correo = contacto?.valor;
+
+        return correo ? (
+          <Tooltip title={correo} placement="top">
+            <a
+              href={`mailto:${correo}`}
+              style={{
+                whiteSpace: 'normal',
+                wordBreak: 'break-word',
+                cursor: 'pointer',
+                color: '#1976d2',
+                textDecoration: 'underline',
+              }}
+            >
+              {correo}
+            </a>
+          </Tooltip>
+        ) : '';
+      },
+    },
+    {
+      field: 'telefono',
+      headerName: 'Teléfono',
+      flex: 1,
+      renderCell: (params) => {
+        const contacto = params.row.contactos_dependencia?.find(
+          (c) => c.tipo.toLowerCase().includes('telefono')
+        );
+        return contacto
+          ? `${contacto.valor}${contacto.extension ? ` Ext. ${contacto.extension}` : ''}`
+          : '';
+      },
+    },
+    {
+      field: 'sitio',
+      headerName: 'Sitio Web',
+      flex: 1,
+      renderCell: (params) => {
+        const contacto = params.row.contactos_dependencia?.find(
+          (c) => c.tipo.toLowerCase().includes('web')
+        );
+        return contacto?.valor ? (
+          <a href={contacto.valor} target="_blank" rel="noopener noreferrer">
+            {contacto.valor}
+          </a>
+        ) : '';
+      },
+    },
+    {
+      field: 'ubicacion',
+      headerName: 'Ubicacion',
+      flex: 1,
+      renderCell: (params) => {
+        const ubicacion = params.row.ubicacion;
+        if (!ubicacion || !ubicacion.codigo || !ubicacion.nombre) return '';
+
+        const texto = `${ubicacion.codigo} - ${ubicacion.nombre}`;
+        return (
+          <Tooltip title={texto} placement="top">
+              <div style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
+                <strong>{ubicacion.codigo}</strong> - {ubicacion.nombre}
+              </div>
+          </Tooltip>          
+        );
+      },
+    },
+    {
+      field: 'sede',
+      headerName: 'Sede',
+      flex: 1,
+      renderCell: (params) => {
+        const sede = params.row.sede;
+        if (!sede) return '';
+
+        const texto = `${sede.nombre} - ${sede.direccion}, ${sede.ciudad}`;
+        return (
+          <Tooltip title={texto} placement="top">
+            <div style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
+              <strong>{sede.nombre}</strong> - {sede.direccion}, {sede.ciudad}
+            </div>
+          </Tooltip>
+        );
+      },
+    },
+  ],
+
+  //Genera tabla de Ubicaciones
+  ubicaciones: [
+    {
+      field: 'codigo',
+      headerName: 'Código Edificio',
+      flex: 1,
+      renderCell: (params) => {
+        const codigoUbicacion = params.row ? params.row.codigo : ''; // Asegurarse que params.row esté definido
+
+        // Generamos el color aleatorio basado en el código de la ubicacion
+        const hashCode = (str) =>
+          str.split('').reduce((acc, char) => char.charCodeAt(0) + ((acc << 5) - acc), 0);
+        const color = `hsl(${Math.abs(hashCode(codigoUbicacion)) % 360}, 80%, 40%)`;
+
+        return (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span
+              style={{
+                width: '30px',
+                height: '30px',
+                borderRadius: '50%',
+                backgroundColor: color,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '0.8em',
+                color: 'white',
+              }}
+            >
               <ApartmentIcon fontSize="small" style={{ color: 'white' }} />
             </span>
             <span
@@ -265,7 +357,7 @@ export const columnasPorCategoria = {
                 fontSize: 'calc(0.771416em)',
               }}
             >
-              {codigoEdificio}
+              {codigoUbicacion}
             </span>
           </div>
         );
@@ -274,7 +366,7 @@ export const columnasPorCategoria = {
     { field: 'nombre', headerName: 'Nombre', flex: 1 },
     {
       field: 'sede',
-      headerName: 'Ubicación',
+      headerName: 'Sede',
       flex: 1,
       renderCell: (params) => {
         const sede = params.row.sede;
@@ -336,4 +428,4 @@ export const columnasPorCategoria = {
     { field: 'ciudad', headerName: 'Ciudad', flex: 1 },
     { field: 'direccion', headerName: 'Dirección', flex: 1 },
   ],
-};
+});

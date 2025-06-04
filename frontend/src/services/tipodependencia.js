@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://127.0.0.1:8000/directorio/tipo-dependencias/';
+const API_URL = 'http://127.0.0.1:8000/directorio/admin/tipo-dependencias/';
 
 export const getTipoDependencias = () => axios.get(API_URL);
 

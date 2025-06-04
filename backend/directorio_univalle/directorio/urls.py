@@ -6,8 +6,8 @@ from .views import *
 
 router = DefaultRouter()
 router.register(r'sedes', SedeViewSet)
-router.register(r'edificios', EdificioViewSet)
 router.register(r'ubicaciones', UbicacionViewSet)
+router.register(r'espacios', EspacioViewSet)
 router.register(r'tipo-dependencias', TipoDependenciaViewSet)
 router.register(r'dependencias', DependenciaViewSet)
 router.register(r'tipo-documentos', TipoDocumentoViewSet)
@@ -20,7 +20,5 @@ router.register(r'cargos', CargoViewSet)
 router.register(r'vinculaciones', VinculacionViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
-    path('publica/buscar/', busquedad_publica),
-    # Nueva ruta para búsqueda pública de funcionarios
+    path('admin/', include(router.urls)),
 ]
