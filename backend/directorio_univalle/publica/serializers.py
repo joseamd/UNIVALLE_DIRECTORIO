@@ -11,6 +11,7 @@ class DependenciaBusquedaPublicaSerializer(serializers.ModelSerializer):
     contactos_dependencia = serializers.SerializerMethodField()
     sede = serializers.SerializerMethodField()
     ubicacion = serializers.SerializerMethodField()
+    personas = serializers.SerializerMethodField() 
 
     class Meta:
         model = Dependencia
@@ -46,7 +47,20 @@ class DependenciaBusquedaPublicaSerializer(serializers.ModelSerializer):
                 'nombre': ubicacion.edificio_nombre
             }
         except AttributeError:
-            return None       
+            return None    
+
+    def get_personas(self, obj):
+        vinculaciones = obj.vinculacion_set.select_related('persona', 'cargo') \
+            .filter(estado_laboral='activo')
+
+        return [
+            {
+                'id': v.persona.id,
+                'nombre': v.persona.nombre_completo,
+                'cargo': v.cargo.nombre
+            }
+            for v in vinculaciones
+        ]
 
 class PersonaBusquedaPublicaSerializer(serializers.ModelSerializer):
     nombre = serializers.SerializerMethodField()

@@ -192,7 +192,10 @@ export const columnasPorCategoria = (handleOpenModal) => ({
         const color = `hsl(${Math.abs(hashCode(nombre)) % 360}, 80%, 40%)`;
 
         return (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div 
+            onClick={() => handleOpenModal(params.row)}
+            style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}
+          >
             <span
               style={{
                 width: '30px',

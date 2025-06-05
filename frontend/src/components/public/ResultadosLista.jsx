@@ -10,6 +10,7 @@ import {
 import { columnasPorCategoria } from '../../config/columnasPorCategoria';
 import SinResultados from './SinResultados';
 import PersonaModal from './modales/PersonaModal';
+import DependenciaModal from './modales/DependenciaModal';
 import '../../styles/BusquedaPublica.scss';
 
 
@@ -20,14 +21,20 @@ const ResultadosLista = ({ datos, categoria, busqueda  }) => {
   const [personaSeleccionada, setPersonaSeleccionada] = useState(null);
   const [openModal, setOpenModal] = useState(false);
 
-  const handleOpenModal = (persona) => {
-    setPersonaSeleccionada(persona);
-    setOpenModal(true);
-  };
+  const [dependenciaSeleccionada, setDependenciaSeleccionada] = useState(null);
+  const [openDependenciaModal, setOpenDependenciaModal] = useState(false);
 
-  const handleCloseModal = () => {
-    setOpenModal(false);
+  const handleOpenModal = (item) => {
+    if (categoria === 'personas') {
+      setPersonaSeleccionada(item);
+      setOpenModal(true);
+    } else if (categoria === 'dependencias') {
+      setDependenciaSeleccionada(item);
+      setOpenDependenciaModal(true);
+    }
   };
+  const handleCloseModal = () => setOpenModal(false);
+  const handleCloseDependenciaModal = () => setOpenDependenciaModal(false);
 
   // Si no hay búsqueda (menos de 3 caracteres), no mostramos nada
   if (!busqueda || busqueda.length < 3) return null;
@@ -37,8 +44,8 @@ const ResultadosLista = ({ datos, categoria, busqueda  }) => {
     return (
       <SinResultados
         query={busqueda}
-        openAlert={true}
-        handleCloseAlert={() => {}}
+        // openAlert={true}     //Se activan si quiero utilizar CustomSnackbar
+        // handleCloseAlert={() => {}}
       />
     );
   }
@@ -74,7 +81,12 @@ const ResultadosLista = ({ datos, categoria, busqueda  }) => {
         open={openModal}
         onClose={handleCloseModal}
         persona={personaSeleccionada}
-      />      
+      />    
+      <DependenciaModal
+        open={openDependenciaModal}
+        onClose={handleCloseDependenciaModal}
+        dependencia={dependenciaSeleccionada}
+      />  
     </div>
   );
 };
