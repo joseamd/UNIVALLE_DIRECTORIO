@@ -1,39 +1,61 @@
-import React, { useState, useEffect } from 'react';
-import { Tabs, Tab, TextField, Box, CircularProgress, Typography } from '@mui/material';
-import { buscarPublica } from '../../services/publicoApi';
-import ResultadosLista from '../../components/public/ResultadosLista';
-import '../../styles/BusquedaPublica.scss';
-import logo from '@/assets/logo.jpg';
-import { Info } from "lucide-react";
-import CustomSnackbar from '../genericTable/CustomSnackbar';
+import React, { useState, useEffect, useRef } from 'react';
+import { Tabs, Tab, TextField, Box, CircularProgress } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
+import { Info } from "lucide-react";
+
+//servicios
+import { buscarPublica } from '../../services/publicoApi';
 import { getCargos } from '../../services/cargo';
 import { getDependenciasHijas } from '../../services/dependencia';
 
+// Componentes
+import ResultadosLista from '../../components/public/ResultadosLista';
+import CustomSnackbar from '../genericTable/CustomSnackbar';
+
+// Estilos y assets
+import '../../styles/BusquedaPublica.scss';
+import logo from '@/assets/logo.jpg';
+
+// Categorías disponibles
 const categorias = ['personas', 'dependencias', 'ubicaciones', 'sedes'];
 
 const BusquedaPublicaTabs = () => {
+  // Estados de búsqueda
   const [query, setQuery] = useState('');
   const [categoria, setCategoria] = useState('personas');
   const [results, setResults] = useState({});
   const [loading, setLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState('info');
+  const ultimaBusquedaRef = useRef({ query: '', categoria: '' }); // Referencia para guardar la última búsqueda realizada   
 
-  // Filtros
+  // Estados de filtros avanzados
   const [cargos, setCargos] = useState([]);
   const [dependencias, setDependencias] = useState([]);
-  const [columnaFiltro] = useState('');
-  const [valorFiltro] = useState('');
+  // Filtro avanzado por Cargos, dependencias  
+  const [cargoSeleccionado, setCargoSeleccionado] = useState(null);
+  const [dependenciaSeleccionada, setDependenciaSeleccionada] = useState(null);
 
+  // Snackbar
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('info');  
+
+  // Modal de ayuda
+  const [showModal, setShowModal] = useState(false);
+
+  // Función de validación del input
+  const validarQuery = (texto) => {
+    const regex = /^[a-zA-Z0-9áéíóúüÁÉÍÓÚÜÑñ\s.,@-]*$/;
+    return regex.test(texto);
+  };
+
+  // Función para mostrar snackbar
   const showSnackbar = (message, severity = 'info') => {
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
     setOpenSnackbar(true);
   };
 
+  // Cierre de snackbar
   const handleCloseSnackbar = (_, reason) => {
     if (reason === 'clickaway') return;
     setOpenSnackbar(false);
@@ -45,38 +67,7 @@ const BusquedaPublicaTabs = () => {
     setDependenciaSeleccionada(null);
   }, [categoria]);
 
-  // Busqueda principal: Solo hacer la búsqueda si el query tiene al menos 3 caracteres
-  useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      if (query.length < 3) {        
-        setResults({});  // Limpiar resultados cuando la búsqueda está vacía o tiene menos de 3 caracteres
-        return;
-      }
-        
-      setLoading(true);
-      // Preparar filtros adicionales si están seleccionados
-      const filtros = {};
-      if (columnaFiltro && valorFiltro) {
-        filtros[columnaFiltro] = valorFiltro;
-      }
-
-      buscarPublica(query, 1, filtros)
-        .then(res => {
-          //console.log('Respuesta API:', res.data);  // Ver estructura aquí
-          setResults(res.data);
-        })
-        .catch(err => {
-          console.error('Error en búsqueda:', err);
-          setResults({});
-        })
-        .finally(() => setLoading(false));
-    }, 500);
-
-    return () => clearTimeout(delayDebounceFn);
-  }, [query, valorFiltro, columnaFiltro, categoria]);
-
-
-  //Carga los Cargos desde el backend
+    //Carga los Cargos desde el backend
   useEffect(() => {
     getCargos()
       .then((res) => {
@@ -92,27 +83,55 @@ const BusquedaPublicaTabs = () => {
     getDependenciasHijas()
       .then(res => setDependencias(res.data))
       .catch(err => console.error('Error al cargar Dependencias:', err));
-  }, []);
-  
+  }, []); 
 
-  const validarQuery = (texto) => {
-    const regex = /^[a-zA-Z0-9áéíóúüÁÉÍÓÚÜÑñ\s.,@-]*$/;
-    return regex.test(texto);
-  };
+  // Busqueda principal: Solo hacer la búsqueda si el query tiene al menos 3 caracteres
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      if (query.length < 3) {        
+        setResults({});  // Limpiar resultados cuando la búsqueda está vacía o tiene menos de 3 caracteres
+        return;
+      }
 
+      // Si el query y la categoría son los mismos que la última búsqueda, evitamos repetirla
+      const ultima = ultimaBusquedaRef.current;
+      // ⚠️ Si ya hicimos esta búsqueda y aún tenemos los resultados, no repetimos la búsqueda
+      const yaBuscado =
+        ultima.query === query &&
+        ultima.categoria === categoria &&
+        results[categoria]?.length > 0;
 
-  // Filtro avanzado por Cargos, dependencias  
-  const [cargoSeleccionado, setCargoSeleccionado] = useState(null);
-  const [dependenciaSeleccionada, setDependenciaSeleccionada] = useState(null);
+      if (yaBuscado) return;        
 
-  // Filtramos los datos según cargo, dependencia seleccionado
+      // Actualizamos el registro de última búsqueda
+      ultimaBusquedaRef.current = { query, categoria };
+        
+      // Ejecutamos la búsqueda
+      setLoading(true);
+
+      buscarPublica(query, 1)
+        .then(res => {
+          //console.log('Respuesta API:', res.data);  // Ver estructura aquí
+          setResults(res.data);
+        })
+        .catch(err => {
+          console.error('Error en búsqueda:', err);
+          setResults({});
+        })
+        .finally(() => setLoading(false));
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [query, categoria]); 
+
+  // Filtrado local adicional (cargo + dependencia)
   const datosFiltrados = (results[categoria] || []).filter(item => {
     const coincideCargo = !cargoSeleccionado || item.cargo === cargoSeleccionado.nombre;
     const coincideDependencia = !dependenciaSeleccionada || item.dependencia?.nombre === dependenciaSeleccionada.nombre;
     return coincideCargo && coincideDependencia;
   });
 
-
+  // Renderizado principal
   return (
     <>
       <div className="busqueda-publica">
@@ -228,8 +247,8 @@ const BusquedaPublicaTabs = () => {
 
         {/* Mostrar Tabla primer busqueda o resultados filtrados */}
         {loading ? (
-          <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
-            <CircularProgress />
+          <Box p={2} display="flex" justifyContent="center">
+            <CircularProgress size={28} />
           </Box>
         ) : (
           <Box className="tabla-resultados" sx={{ mt: 2 }}>
@@ -251,12 +270,12 @@ const BusquedaPublicaTabs = () => {
               </p>
               <p>
                 <strong>Categorías disponibles:</strong><br />
-                - <strong>Personas:</strong> puede buscar por nombre o apellido.<br />
+                - <strong>Personas:</strong> puede buscar por nombre, cargo o correo institucional.<br />
                 - <strong>Dependencias, Edificios y Sedes:</strong> puede buscar por nombre.
               </p>
               <p>
-                Una vez ingresado el término de búsqueda, seleccione la categoría correspondiente (Personas, Dependencias, Edificios o Sedes) para obtener resultados más precisos.<br />
-                - En la categoría <strong>Personas</strong>, es posible filtrar por nombre, apellido, cargo, dependencia o correo institucional.<br />
+                Una vez ingresado el término de búsqueda, seleccione la categoría correspondiente (Personas, Dependencias, ubicaciones o Sedes) para obtener resultados más precisos.<br />
+                - En la categoría <strong>Personas</strong>, es posible filtrar por cargo o dependencia.<br />
                 - En las demás categorías, se puede filtrar por cada una de las columnas disponibles.
               </p>
               <p>
