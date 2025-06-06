@@ -43,20 +43,12 @@ export const columnasPorCategoria = (handleOpenModal) => ({
                 fontWeight: 'bold',
                 color: 'white',
                 textTransform: 'uppercase',
+                flexShrink: 0 // Previene que el avatar se reduzca si el texto es largo
               }}
             >
               {iniciales}
             </span>
-            <span
-              style={{
-                display: 'table-cell',
-                verticalAlign: 'middle',
-                whiteSpace: 'nowrap',
-                fontSize: 'calc(0.771416em)',
-              }}
-            >
-              {nombre}
-            </span>
+            <span>{nombre}</span>
           </div>
         );
       }
@@ -71,11 +63,7 @@ export const columnasPorCategoria = (handleOpenModal) => ({
         const texto = params.value?.toLowerCase() || '';
         const capitalizado = texto.replace(/\b\w/g, char => char.toUpperCase());
 
-        return (
-          <div style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
-            {capitalizado}
-          </div>
-        );
+        return <div>{capitalizado}</div>;
       }
     },
     {
@@ -93,11 +81,10 @@ export const columnasPorCategoria = (handleOpenModal) => ({
             <a
               href={`mailto:${correo}`}
               style={{
-                whiteSpace: 'normal',
-                wordBreak: 'break-word',
                 cursor: 'pointer',
                 color: '#1976d2',
                 textDecoration: 'underline',
+                overflowWrap: 'anywhere'
               }}
             >
               {correo}
@@ -116,9 +103,11 @@ export const columnasPorCategoria = (handleOpenModal) => ({
         const contacto = params.row.contactos_persona?.find(
           (c) => c.tipo.toLowerCase().includes('telefono')
         );
-        return contacto
+
+        const texto = contacto
           ? `${contacto.valor}${contacto.extension ? ` Ext. ${contacto.extension}` : ''}`
           : '';
+        return <div>{texto}</div>;
       },
     },
     {
@@ -132,10 +121,10 @@ export const columnasPorCategoria = (handleOpenModal) => ({
         const texto = `${dependencia.nombre}`;
         return (
           <Tooltip title={texto} placement="top">
-            <div style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
+            <div>
               {dependencia?.nombre || ''}
             </div>
-          </Tooltip>          
+          </Tooltip>
         );
       },
     },
@@ -205,23 +194,17 @@ export const columnasPorCategoria = (handleOpenModal) => ({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '0.8em',
+                fontSize: '0.6em',
+                fontWeight: 'bold',
                 color: 'white',
+                textTransform: 'uppercase',
+                flexShrink: 0 // Previene que el avatar se reduzca si el texto es largo
               }}
             >
               {/* Aquí el ícono centrado en el círculo */}
               <CorporateFareIcon fontSize="small" style={{ color: 'white' }} />
             </span>
-            <span
-              style={{
-                display: 'table-cell',
-                verticalAlign: 'middle',
-                whiteSpace: 'nowrap',
-                fontSize: 'calc(0.771416em)',
-              }}
-            >
-              {nombre}
-            </span>
+            <span>{nombre}</span>
           </div>
         );
       }
@@ -242,11 +225,10 @@ export const columnasPorCategoria = (handleOpenModal) => ({
             <a
               href={`mailto:${correo}`}
               style={{
-                whiteSpace: 'normal',
-                wordBreak: 'break-word',
                 cursor: 'pointer',
                 color: '#1976d2',
                 textDecoration: 'underline',
+                overflowWrap: 'anywhere'
               }}
             >
               {correo}
@@ -259,13 +241,16 @@ export const columnasPorCategoria = (handleOpenModal) => ({
       field: 'telefono',
       headerName: 'Teléfono',
       flex: 1,
+      minWidth: 120,
+      maxWidth: 150,
       renderCell: (params) => {
         const contacto = params.row.contactos_dependencia?.find(
           (c) => c.tipo.toLowerCase().includes('telefono')
         );
-        return contacto
+        const texto = contacto
           ? `${contacto.valor}${contacto.extension ? ` Ext. ${contacto.extension}` : ''}`
           : '';
+        return <div>{texto}</div>;
       },
     },
     {
@@ -277,7 +262,12 @@ export const columnasPorCategoria = (handleOpenModal) => ({
           (c) => c.tipo.toLowerCase().includes('web')
         );
         return contacto?.valor ? (
-          <a href={contacto.valor} target="_blank" rel="noopener noreferrer">
+          <a
+            href={contacto.valor}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: '#1976d2', textDecoration: 'underline' }}
+          >
             {contacto.valor}
           </a>
         ) : '';
@@ -294,7 +284,7 @@ export const columnasPorCategoria = (handleOpenModal) => ({
         const texto = `${ubicacion.codigo} - ${ubicacion.nombre}`;
         return (
           <Tooltip title={texto} placement="top">
-              <div style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
+              <div>
                 <strong>{ubicacion.codigo}</strong> - {ubicacion.nombre}
               </div>
           </Tooltip>          
@@ -312,7 +302,7 @@ export const columnasPorCategoria = (handleOpenModal) => ({
         const texto = `${sede.nombre} - ${sede.direccion}, ${sede.ciudad}`;
         return (
           <Tooltip title={texto} placement="top">
-            <div style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
+            <div>
               <strong>{sede.nombre}</strong> - {sede.direccion}, {sede.ciudad}
             </div>
           </Tooltip>
@@ -407,28 +397,36 @@ export const columnasPorCategoria = (handleOpenModal) => ({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '0.8em',
+                fontSize: '0.6em',
+                fontWeight: 'bold',
                 color: 'white',
+                textTransform: 'uppercase',
+                flexShrink: 0 // Previene que el avatar se reduzca si el texto es largo
               }}
             >
               {/* Aquí el ícono centrado en el círculo */}
               <LocationCityIcon fontSize="small" style={{ color: 'white' }} />
             </span>
-            <span
-              style={{
-                display: 'table-cell',
-                verticalAlign: 'middle',
-                whiteSpace: 'nowrap',
-                fontSize: 'calc(0.771416em)',
-              }}
-            >
-              {nombreSede}
-            </span>
+            <span>{nombreSede}</span>
           </div>
         );
       }
     },
-    { field: 'ciudad', headerName: 'Ciudad', flex: 1 },
-    { field: 'direccion', headerName: 'Dirección', flex: 1 },
+    {
+    field: 'ciudad',
+    headerName: 'Ciudad',
+    flex: 1,
+    renderCell: (params) => (
+      <span>{params.row.ciudad || ''}</span>
+    ),
+    },
+    {
+      field: 'direccion',
+      headerName: 'Dirección',
+      flex: 1,
+      renderCell: (params) => (
+        <span>{params.row.direccion || ''}</span>
+      ),
+    },
   ],
 });

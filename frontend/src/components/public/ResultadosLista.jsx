@@ -3,7 +3,6 @@ import { esES } from '@mui/x-data-grid/locales'; // Traducciones al español par
 import {
   DataGrid,
   GridToolbarColumnsButton,
-  GridToolbarDensitySelector,
   GridToolbarQuickFilter,
 } from '@mui/x-data-grid';
 import { CircularProgress, Box} from '@mui/material'; // Para fallback más profesional
@@ -25,7 +24,6 @@ const CustomToolbar = React.memo(() => (
   <div className="mi-toolbar">
     <div className="mi-toolbar-botones">
       <GridToolbarColumnsButton />
-      <GridToolbarDensitySelector />
     </div>
     <GridToolbarQuickFilter debounceMs={500} />
   </div>
@@ -104,7 +102,8 @@ const ResultadosLista = ({ datos, categoria, busqueda  }) => {
         paginationModel={paginationModel}
         onPaginationModelChange={(newModel) => setPaginationModel(newModel)}
         pageSizeOptions={[5, 10]}
-        slots={{ toolbar: CustomToolbar }}        
+        slots={{ toolbar: CustomToolbar }}    
+        getRowHeight={() => 'auto'} // 👈 Esto permite que la fila crezca según el contenido    
       />
       {/* Suspense para cargar modales solo cuando se necesiten */}
       <Suspense fallback={<Box p={2}><CircularProgress size={28} /></Box>}>

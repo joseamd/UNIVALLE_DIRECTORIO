@@ -218,7 +218,18 @@ $footer-background: linear-gradient(135deg, #b0b0b0, #e0e0e0); /* Degradado para
   }
 
   .MuiDataGrid-cell {
-    font-size: 14px;
+    font-size: 13px;
+    font-family: Roboto, sans-serif;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.4;
+    display: flex;               // Necesario para centrar con Flexbox
+    align-items: center;         // Centrado vertical
+    justify-content: center;     // Centrado horizontal
+    text-align: center;          // Centra el texto si el contenido permite
+    padding: 8px;                // Un poco de espacio interno para mejorar apariencia
+    max-width: 100%;
+    height: 100%;
   }
 
   // Estilo para la toolbar
@@ -292,21 +303,32 @@ $footer-background: linear-gradient(135deg, #b0b0b0, #e0e0e0); /* Degradado para
   .mi-data-grid {
     .MuiDataGrid-root {
       overflow-x: auto;
+      max-width: 100%;
     }
 
     .MuiDataGrid-cell,
     .MuiDataGrid-columnHeader {
-      font-size: 12px;
+      font-size: 11px;
       padding: 4px;
+      white-space: normal; 
+      word-break: break-word;
+      text-align: left; 
+      justify-content: flex-start;
+    }
+
+    .MuiDataGrid-columnHeaders {
+      flex-wrap: wrap; // Permite que los encabezados se acomoden mejor si hay muchos
     }
 
     .MuiTablePagination-root {
       font-size: 12px;
+      flex-direction: column;
+      align-items: flex-start;
     }
 
     .MuiDataGrid-toolbarContainer {
-      flex-direction: row;
-      align-items: flex-start;
+      flex-direction: column;
+      align-items: stretch;
       gap: 8px;
     }
   }
