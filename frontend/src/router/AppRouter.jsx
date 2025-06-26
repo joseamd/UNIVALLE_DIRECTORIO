@@ -15,10 +15,11 @@ import BusquedaGlobal from '../components/admin/BusquedaGlobal';
 
 const AppRouter = () => {
 
-  const {darkMode} = useContext(DarkModeContext)
+  const { darkMode } = useContext(DarkModeContext);
+  const isAdminRoute = window.location.pathname.startsWith("/directorio/admin");
 
   return (
-    <div className={darkMode ? "app dark" : "app"}>
+    <div className={isAdminRoute && darkMode ? "app dark" : "app"}>
        <BrowserRouter>
         <Routes>
           {/* Rutas principales con Layout */}
