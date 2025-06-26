@@ -1,4 +1,4 @@
-.persona-modal {
+.public-modal {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -11,7 +11,7 @@
   outline: none; /* para evitar borde azul de enfoque en modal */
 }
 
-.persona-modal__header {
+.public-modal__header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -23,32 +23,32 @@
   box-sizing: border-box;
 }
 
-.persona-modal__title {
+.public-modal__title {
   margin: 0;
   font-weight: 600;
   font-size: 1.25rem; /* equivalente a h6 */
   color: #fff;
 }
 
-.persona-modal__close-button {
+.public-modal__close-button {
   color: #fff;
 }
 
-.persona-modal__content {
+.public-modal__content {
   padding: 24px;
   color: #333;
 }
 
-.persona-modal__label {
+.public-modal__label {
   font-weight: bold;
   color: #555;
   margin-bottom: 4px;
 }
 
-.persona-modal__value {
+.public-modal__value {
   margin-bottom: 12px;
 }
 
-.persona-modal__divider {
+.public-modal__divider {
   margin: 0;
 }
