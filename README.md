@@ -39,7 +39,7 @@ python -m venv venv
 Activar entorno virtual
 En Linux o Git Bash (Windows):
 ```bash
-source venv/bin/activate
+source venv/Scripts/activate
 ```
 
 En Windows CMD:
