@@ -22,7 +22,7 @@ frontend/.env
 frontend/*.local
 
 # === BACKEND (Django) ===
-
+/paquetes
 # Entorno virtual
 venv/
 
