@@ -1,8 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react';
 import '@/styles/home.scss'; 
 import Widget from '../../components/widget/Widget';
 
-const Home = () => {
+const AdminHome = () => {
+  useEffect(() => {
+    document.title = 'Directorio Admin';
+  }, []);
+  
   return (    
       <div className="widgets">
         <Widget type="funcionarios" />
@@ -13,4 +17,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default AdminHome;
