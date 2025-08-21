@@ -1,3 +1,5 @@
+@use './mixins' as *;
+
 // Estilos para la fecha al lado del título
 .fecha {
   font-style: italic;
@@ -100,21 +102,14 @@
 }
 
 // 📱 Responsive para la tabla
-@media (max-width: 768px) {
+@include respond-to(tablet) {
   .custom-header {
-    flex-direction: row; // Cambia la dirección a horizontal para pantallas pequeñas
-    justify-content: space-between; // Los elementos se distribuyen de manera uniforme
-    gap: 8px; // Ajusta el espacio para no expandir demasiado 
-    
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+
     h2 {
       font-size: 1rem;
-      margin: 0;
-    }
-
-    .fecha {
-      text-align: left;
-      font-size: 0.9rem;
-      padding: 0;
     }
 
     .button-create {
@@ -122,16 +117,21 @@
       justify-content: flex-end;
 
       button {
-        width: auto;
         font-size: 0.8rem;
         padding: 4px 10px;
       }
     }
   }
 
+  .fecha {
+    text-align: left;
+    font-size: 0.9rem;
+    padding: 0;
+  }
+
   .data-grid-wrapper {
     width: 100%;
-    overflow-x: auto; /* Permite desplazarse horizontalmente */
+    overflow-x: auto;
   }
 
   .custom-data-grid {
@@ -156,4 +156,3 @@
     }
   }
 }
-

@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from '../components/Layout';
-import Home from '../pages/home/Home';
 import Login from '../pages/Login/Login';
 import List from '../pages/list/List';
 import Single from '../pages/single/Single';
@@ -11,18 +10,21 @@ import BusquedaPublicaPage from '../pages/public/BusquedaPublicaPage';
 import "../styles/genericTable.scss";
 import '../styles/dark.scss';
 import { DarkModeContext } from '../context/darkModeContext';
+import AdminHome from '../pages/home/AdminHome';
 import BusquedaGlobal from '../components/admin/BusquedaGlobal';
 
 const AppRouter = () => {
 
-  const {darkMode} = useContext(DarkModeContext)
+  const { darkMode } = useContext(DarkModeContext);
+  const isAdminRoute = window.location.pathname.startsWith("/directorio/admin");
 
   return (
-    <div className={darkMode ? "app dark" : "app"}>
+    <div className={isAdminRoute && darkMode ? "app dark" : "app"}>
        <BrowserRouter>
         <Routes>
           {/* Rutas principales con Layout */}
           <Route path="directorio/admin" element={<Layout />}>
+          <Route index element={<AdminHome />} />
             {/* Ruta para Sedes */}
             <Route path="sede">
               <Route index element={<List endpoint="sede" />} />
